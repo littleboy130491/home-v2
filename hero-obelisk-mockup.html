@@ -19,7 +19,33 @@
 
     body {
       min-height: 100vh;
-      background: var(--mockup-deep);
+      background:
+        /* first-impression — gold right, cyan left */
+        radial-gradient(ellipse 46% 12% at 78% 20%, rgba(232, 197, 71, 0.12), transparent 70%),
+        radial-gradient(ellipse 38% 10% at 18% 17%, rgba(58, 199, 223, 0.09), transparent 72%),
+        /* services-pathway — cyan bottom-left, gold top-right */
+        radial-gradient(ellipse 38% 9% at 82% 32%, rgba(232, 197, 71, 0.07), transparent 72%),
+        radial-gradient(ellipse 40% 11% at 20% 38%, rgba(58, 199, 223, 0.08), transparent 72%),
+        /* social-proof — cyan center bloom */
+        radial-gradient(ellipse 58% 13% at 50% 52%, rgba(58, 199, 223, 0.12), transparent 70%),
+        radial-gradient(ellipse 32% 8% at 14% 58%, rgba(232, 197, 71, 0.05), transparent 72%),
+        /* proof-of-work — gold center, cyan left */
+        radial-gradient(ellipse 48% 10% at 50% 68%, rgba(232, 197, 71, 0.08), transparent 72%),
+        radial-gradient(ellipse 34% 9% at 18% 72%, rgba(58, 199, 223, 0.06), transparent 74%),
+        /* our-value — cyan right, gold left */
+        radial-gradient(ellipse 38% 9% at 82% 80%, rgba(58, 199, 223, 0.08), transparent 72%),
+        radial-gradient(ellipse 36% 8% at 14% 82%, rgba(232, 197, 71, 0.06), transparent 74%),
+        /* final-cta — gold halo top, cyan halo bottom */
+        radial-gradient(ellipse 52% 10% at 50% 90%, rgba(232, 197, 71, 0.10), transparent 70%),
+        radial-gradient(ellipse 60% 12% at 50% 98%, rgba(58, 199, 223, 0.12), transparent 70%),
+        /* base */
+        linear-gradient(180deg, #02070a 0%, #04101a 28%, #03101a 60%, #02070a 100%),
+        var(--mockup-deep);
+    }
+
+    main {
+      position: relative;
+      isolation: isolate;
     }
 
     .obelisk-hero {
@@ -101,10 +127,13 @@
     }
 
     .obelisk-logo {
-      font-family: "Syne", sans-serif;
-      font-size: 15px;
-      font-weight: 800;
-      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+    }
+
+    .obelisk-logo img {
+      height: 28px;
+      width: auto;
     }
 
     .obelisk-links {
@@ -221,11 +250,7 @@
       min-height: 100dvh;
       display: grid;
       align-items: center;
-      background:
-        radial-gradient(ellipse at 76% 45%, rgba(232, 197, 71, 0.18), transparent 30%),
-        radial-gradient(ellipse at 16% 24%, rgba(58, 199, 223, 0.14), transparent 28%),
-        linear-gradient(180deg, #02070a 0%, #080808 58%, #030403 100%);
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      background: transparent;
     }
 
     .first-impression::before {
@@ -498,194 +523,7 @@
       position: relative;
       overflow: hidden;
       padding-block: clamp(80px, 10vw, 140px);
-      background:
-        radial-gradient(ellipse at 20% 80%, rgba(58, 199, 223, 0.10), transparent 30%),
-        radial-gradient(ellipse at 80% 20%, rgba(232, 197, 71, 0.08), transparent 28%),
-        linear-gradient(180deg, #030403 0%, #080808 50%, #02070a 100%);
-      border-top: 1px solid rgba(255, 255, 255, 0.06);
-    }
-
-    .services-pathway::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      opacity: 0.08;
-      background-image:
-        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-      background-size: 72px 72px;
-      pointer-events: none;
-    }
-
-    .pathway-inner {
-      position: relative;
-      z-index: 1;
-      width: min(calc(100% - 36px), 1320px);
-      margin-inline: auto;
-    }
-
-    .pathway-header {
-      text-align: center;
-      max-width: 640px;
-      margin-inline: auto;
-      margin-bottom: clamp(48px, 6vw, 72px);
-    }
-
-    .pathway-header h2 {
-      font-family: "Syne", sans-serif;
-      font-size: clamp(32px, 4.2vw, 56px);
-      font-weight: 700;
-      line-height: 1.05;
-      letter-spacing: -0.02em;
-      color: #f7fbfb;
-    }
-
-    .pathway-header h2 em {
-      color: var(--color-accent);
-      font-style: normal;
-    }
-
-    .pathway-header p {
-      margin-top: 18px;
-      font-size: clamp(15px, 1.3vw, 18px);
-      line-height: 1.55;
-      color: rgba(247, 251, 251, 0.62);
-    }
-
-    .pathway-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: clamp(18px, 2.4vw, 32px);
-    }
-
-    .pathway-card {
-      position: relative;
-      aspect-ratio: 3 / 4;
-      border-radius: 28px;
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      background: #09141a;
-      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.40);
-      cursor: pointer;
-      transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1),
-                  box-shadow 600ms ease,
-                  border-color 400ms ease;
-    }
-
-    .pathway-card:hover {
-      transform: translateY(-10px) scale(1.015);
-      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.55), 0 0 60px rgba(58, 199, 223, 0.10);
-      border-color: rgba(58, 199, 223, 0.25);
-    }
-
-    .pathway-card__bg {
-      position: absolute;
-      inset: 0;
-      background-size: cover;
-      background-position: center;
-      opacity: 0.55;
-      transition: opacity 700ms ease, transform 800ms cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .pathway-card:hover .pathway-card__bg {
-      opacity: 0.70;
-      transform: scale(1.06);
-    }
-
-    .pathway-card__overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, rgba(2, 7, 10, 0.96) 0%, rgba(2, 7, 10, 0.55) 38%, rgba(2, 7, 10, 0.15) 65%, transparent 100%);
-      pointer-events: none;
-    }
-
-    .pathway-card__content {
-      position: absolute;
-      inset: auto 0 0;
-      padding: clamp(24px, 2.8vw, 36px);
-      z-index: 2;
-    }
-
-    .pathway-card__label {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 14px;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: rgba(247, 251, 251, 0.42);
-    }
-
-    .pathway-card__label::before {
-      content: "";
-      width: 24px;
-      height: 1px;
-      background: var(--color-accent);
-      opacity: 0.6;
-    }
-
-    .pathway-card__title {
-      font-family: "Syne", sans-serif;
-      font-size: clamp(28px, 3vw, 42px);
-      font-weight: 600;
-      line-height: 1.05;
-      color: #f7fbfb;
-      letter-spacing: -0.01em;
-    }
-
-    .pathway-card__desc {
-      margin-top: 12px;
-      font-size: clamp(13px, 1.05vw, 15px);
-      line-height: 1.5;
-      color: rgba(247, 251, 251, 0.58);
-      max-width: 92%;
-    }
-
-    .pathway-card__cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 20px;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--color-accent);
-      opacity: 0;
-      transform: translateY(10px);
-      transition: opacity 400ms ease, transform 400ms cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .pathway-card:hover .pathway-card__cta {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .pathway-card__cta::after {
-      content: "\2192";
-      font-size: 14px;
-      transition: transform 300ms ease;
-    }
-
-    .pathway-card:hover .pathway-card__cta::after {
-      transform: translateX(4px);
-    }
-
-    /* ============================================================
-       SECTION 3 — Services Pathway
-       Three cinematic cards: New Build, Redesign, Partnership
-       ============================================================ */
-    .services-pathway {
-      position: relative;
-      overflow: hidden;
-      padding-block: clamp(80px, 10vw, 140px);
-      background:
-        radial-gradient(ellipse at 20% 80%, rgba(58, 199, 223, 0.10), transparent 30%),
-        radial-gradient(ellipse at 80% 20%, rgba(232, 197, 71, 0.08), transparent 28%),
-        linear-gradient(180deg, #030403 0%, #080808 50%, #02070a 100%);
-      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      background: transparent;
     }
 
     .services-pathway::before {
@@ -864,38 +702,13 @@
       position: relative;
       overflow: hidden;
       padding-block: clamp(88px, 11vw, 152px);
-      background:
-        radial-gradient(ellipse at 50% 22%, rgba(58, 199, 223, 0.18), transparent 42%),
-        radial-gradient(ellipse at 14% 88%, rgba(232, 197, 71, 0.06), transparent 30%),
-        linear-gradient(180deg, #02070a 0%, #051421 52%, #020608 100%);
-      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      background: transparent;
       color: #f7fbfb;
     }
 
-    .social-proof::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      opacity: 0.10;
-      background-image:
-        linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
-      background-size: 96px 96px;
-      mask-image: radial-gradient(ellipse at 50% 30%, black 0%, transparent 75%);
-      pointer-events: none;
-    }
-
+    .social-proof::before,
     .social-proof::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      opacity: 0.06;
-      background-image:
-        repeating-radial-gradient(circle at 78% 18%, rgba(255, 255, 255, 0.4) 0 1px, transparent 1px 6px),
-        repeating-radial-gradient(circle at 18% 72%, rgba(255, 255, 255, 0.3) 0 1px, transparent 1px 8px);
-      background-size: 141px 147px, 183px 191px;
-      mix-blend-mode: soft-light;
+      content: none;
     }
 
     .proof-inner {
@@ -915,7 +728,10 @@
       justify-items: center;
     }
 
-    .proof-kicker {
+    .proof-kicker,
+    .work-kicker,
+    .value-kicker,
+    .final-kicker {
       display: inline-flex;
       width: fit-content;
       min-height: 36px;
@@ -1231,11 +1047,7 @@
       position: relative;
       overflow: hidden;
       padding-block: clamp(96px, 11vw, 160px) clamp(60px, 7vw, 100px);
-      background:
-        radial-gradient(ellipse at 50% 18%, rgba(232, 197, 71, 0.10), transparent 38%),
-        radial-gradient(ellipse at 18% 80%, rgba(58, 199, 223, 0.08), transparent 30%),
-        linear-gradient(180deg, #02070a 0%, #06121a 52%, #02070a 100%);
-      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      background: transparent;
       color: #f7fbfb;
     }
 
@@ -1586,11 +1398,7 @@
       position: relative;
       overflow: hidden;
       padding-block: clamp(96px, 11vw, 160px);
-      background:
-        radial-gradient(ellipse at 80% 20%, rgba(58, 199, 223, 0.10), transparent 36%),
-        radial-gradient(ellipse at 12% 80%, rgba(232, 197, 71, 0.08), transparent 32%),
-        linear-gradient(180deg, #02070a 0%, #07141d 50%, #02070a 100%);
-      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      background: transparent;
       color: #f7fbfb;
     }
 
@@ -1992,38 +1800,13 @@
       position: relative;
       overflow: hidden;
       padding-block: clamp(96px, 12vw, 180px);
-      background:
-        radial-gradient(ellipse at 50% 20%, rgba(232, 197, 71, 0.16), transparent 38%),
-        radial-gradient(ellipse at 50% 100%, rgba(58, 199, 223, 0.18), transparent 50%),
-        linear-gradient(180deg, #02070a 0%, #050d14 50%, #020407 100%);
-      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      background: transparent;
       color: #f7fbfb;
     }
 
-    .final-cta::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      opacity: 0.10;
-      background-image:
-        linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
-      background-size: 96px 96px;
-      mask-image: radial-gradient(ellipse at 50% 30%, black 0%, transparent 78%);
-      pointer-events: none;
-    }
-
+    .final-cta::before,
     .final-cta::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      opacity: 0.08;
-      background-image:
-        repeating-radial-gradient(circle at 22% 18%, rgba(255, 255, 255, 0.4) 0 1px, transparent 1px 6px),
-        repeating-radial-gradient(circle at 78% 82%, rgba(255, 255, 255, 0.3) 0 1px, transparent 1px 8px);
-      background-size: 141px 147px, 173px 181px;
-      mix-blend-mode: soft-light;
+      content: none;
     }
 
     .final-inner {
@@ -2478,7 +2261,9 @@
   <main>
     <section class="obelisk-hero" aria-labelledby="obelisk-title">
       <nav class="obelisk-nav" aria-label="Navigasi utama">
-        <a class="obelisk-logo" href="#">IMAJINER</a>
+        <a class="obelisk-logo" href="#">
+          <img src="resources/Logo Imajiner - White.png" alt="Imajiner" height="28">
+        </a>
         <div class="obelisk-links" aria-label="Tautan halaman">
           <a href="#">Home</a>
           <a href="#">Services</a>
@@ -2513,7 +2298,6 @@
     <section class="first-impression" id="first-impression" aria-labelledby="impression-title">
       <div class="impression-inner">
         <div class="impression-copy">
-          <p class="impression-kicker">First Impression</p>
           <h2 class="impression-heading" id="impression-title">
             <strong>X%</strong> users start their journey by searching the internet.
           </h2>
@@ -2608,7 +2392,6 @@
     <section class="social-proof" id="social-proof" aria-labelledby="proof-title">
       <div class="proof-inner">
         <div class="proof-header">
-          <p class="proof-kicker">Social Proof</p>
           <h2 id="proof-title">Dipercaya oleh brand <em>terkemuka</em><br>di berbagai industri.</h2>
           <p class="proof-lede">Dari startup yang sedang bertumbuh hingga perusahaan mapan, kami telah membantu mereka membangun kehadiran digital yang berkesan—dan mengubah pengunjung pertama menjadi pelanggan jangka panjang.</p>
         </div>
@@ -2687,7 +2470,6 @@
     <section class="proof-of-work" id="proof-of-work" aria-labelledby="work-title">
       <div class="work-inner">
         <div class="work-header">
-          <p class="work-kicker">Proof of Work</p>
           <h2 id="work-title">Setiap proyek adalah cerita.<br><em>Lihat hasil kerja kami.</em></h2>
           <p class="work-lede">Kami tidak mengejar volume atau eksposur—setiap website kami rancang sebagai studi kasus tersendiri, dengan detail yang dipikirkan dan hasil yang bisa diukur.</p>
           <a class="work-cta" href="#">View Portfolio</a>
@@ -2786,7 +2568,6 @@
     <section class="our-value" id="our-value" aria-labelledby="value-title">
       <div class="value-inner">
         <div class="value-header">
-          <p class="value-kicker">Our Value</p>
           <h2 id="value-title">Apa yang membuat kami <em>berbeda.</em></h2>
           <p class="value-lede">Empat hal yang menjadi pegangan setiap kali kami merancang dan merawat website klien — bukan janji, tapi cara kerja.</p>
         </div>
@@ -2863,8 +2644,6 @@
     <!-- Section 7: Final CTA -->
     <section class="final-cta" id="final-cta" aria-labelledby="final-headline">
       <div class="final-inner">
-        <p class="final-kicker">3 Detik</p>
-
         <div class="countdown-stage" aria-label="Hitungan mundur tiga detik">
           <span class="countdown countdown--3" aria-hidden="true">3</span>
           <span class="countdown countdown--2" aria-hidden="true">2</span>
