@@ -15,6 +15,14 @@
       --mockup-cyan: #3ac7df;
       --mockup-blue: #062433;
       --mockup-deep: #02070a;
+
+      --heading-font-family: "Syne", sans-serif;
+      --heading-weight: 700;
+      --heading-color: #f7fbfb;
+      --heading-line-height: 1.05;
+      --heading-letter-spacing: -0.015em;
+      --heading-size-section: clamp(34px, 4.4vw, 60px);
+      --heading-size-impression: clamp(40px, 5.2vw, 72px);
     }
 
     body {
@@ -47,6 +55,41 @@
       position: relative;
       isolation: isolate;
     }
+    .section-inner {
+      position: relative;
+      z-index: 1;
+      width: min(calc(100% - 36px), 1320px);
+      margin-inline: auto;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-inline: auto;
+      display: grid;
+      justify-items: center;
+    }
+
+    .section-title {
+      font-family: var(--heading-font-family);
+      font-weight: var(--heading-weight);
+      line-height: var(--heading-line-height);
+      letter-spacing: var(--heading-letter-spacing);
+      font-size: var(--section-title-size, var(--heading-size-section));
+      color: var(--heading-color);
+    }
+
+    .section-title em {
+      color: var(--color-accent);
+      font-style: italic;
+      font-family: inherit;
+      font-weight: inherit;
+    }
+
+    .section-lede {
+      color: rgba(247, 251, 251, 0.62);
+      line-height: 1.6;
+    }
+
 
     .obelisk-hero {
       position: relative;
@@ -283,27 +326,10 @@
       gap: 30px;
     }
 
-    .impression-kicker {
-      display: inline-flex;
-      width: fit-content;
-      min-height: 36px;
-      align-items: center;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 999px;
-      padding-inline: 14px;
-      color: rgba(250, 250, 248, 0.62);
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
-      background: rgba(255, 255, 255, 0.04);
-    }
 
     .impression-heading {
+      --section-title-size: var(--heading-size-impression);
       max-width: 760px;
-      font-family: "Syne", sans-serif;
-      font-size: clamp(40px, 5.2vw, 72px);
-      font-weight: 700;
       line-height: 1;
       letter-spacing: 0;
     }
@@ -538,39 +564,25 @@
       pointer-events: none;
     }
 
-    .pathway-inner {
-      position: relative;
-      z-index: 1;
-      width: min(calc(100% - 36px), 1320px);
-      margin-inline: auto;
-    }
 
     .pathway-header {
-      text-align: center;
       max-width: 640px;
-      margin-inline: auto;
       margin-bottom: clamp(48px, 6vw, 72px);
     }
 
-    .pathway-header h2 {
-      font-family: "Syne", sans-serif;
-      font-size: clamp(32px, 4.2vw, 56px);
-      font-weight: 700;
-      line-height: 1.05;
+    .pathway-header .section-title {
+      --section-title-size: clamp(32px, 4.2vw, 56px);
       letter-spacing: -0.02em;
-      color: #f7fbfb;
     }
 
-    .pathway-header h2 em {
-      color: var(--color-accent);
+    .pathway-header .section-title em {
       font-style: normal;
     }
 
-    .pathway-header p {
+    .pathway-header .section-lede {
       margin-top: 18px;
       font-size: clamp(15px, 1.3vw, 18px);
       line-height: 1.55;
-      color: rgba(247, 251, 251, 0.62);
     }
 
     .pathway-grid {
@@ -711,63 +723,21 @@
       content: none;
     }
 
-    .proof-inner {
-      position: relative;
-      z-index: 1;
-      width: min(calc(100% - 36px), 1320px);
-      margin-inline: auto;
-    }
 
     .proof-header {
-      text-align: center;
       max-width: 720px;
-      margin-inline: auto;
       margin-bottom: clamp(48px, 6vw, 72px);
-      display: grid;
       gap: 18px;
-      justify-items: center;
     }
 
-    .proof-kicker,
-    .work-kicker,
-    .value-kicker,
-    .final-kicker {
-      display: inline-flex;
-      width: fit-content;
-      min-height: 36px;
-      align-items: center;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 999px;
-      padding-inline: 14px;
-      color: rgba(247, 251, 251, 0.62);
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.22em;
-      background: rgba(255, 255, 255, 0.04);
-    }
-
-    .proof-header h2 {
-      font-family: "Syne", sans-serif;
-      font-size: clamp(34px, 4.4vw, 60px);
-      font-weight: 700;
-      line-height: 1.05;
-      letter-spacing: -0.015em;
-    }
-
-    .proof-header h2 em {
-      color: var(--color-accent);
-      font-style: italic;
-      font-family: "Syne", sans-serif;
-      font-weight: 700;
+    .proof-header .section-title {
+      --section-title-size: clamp(34px, 4.4vw, 60px);
     }
 
     .proof-lede {
       max-width: 560px;
       margin-top: 6px;
-      color: rgba(247, 251, 251, 0.62);
       font-size: clamp(14px, 1.15vw, 17px);
-      line-height: 1.6;
     }
 
     .proof-logos {
@@ -1064,59 +1034,20 @@
       pointer-events: none;
     }
 
-    .work-inner {
-      position: relative;
-      z-index: 1;
-      width: min(calc(100% - 36px), 1320px);
-      margin-inline: auto;
-    }
-
     .work-header {
-      text-align: center;
       max-width: 780px;
-      margin-inline: auto;
       margin-bottom: clamp(56px, 7vw, 96px);
-      display: grid;
       gap: 20px;
-      justify-items: center;
     }
 
-    .work-kicker {
-      display: inline-flex;
-      width: fit-content;
-      min-height: 36px;
-      align-items: center;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 999px;
-      padding-inline: 14px;
-      color: rgba(247, 251, 251, 0.62);
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.22em;
-      background: rgba(255, 255, 255, 0.04);
-    }
-
-    .work-header h2 {
-      font-family: "Syne", sans-serif;
-      font-size: clamp(34px, 4.6vw, 64px);
-      font-weight: 700;
+    .work-header .section-title {
+      --section-title-size: clamp(34px, 4.6vw, 64px);
       line-height: 1.04;
-      letter-spacing: -0.015em;
-    }
-
-    .work-header h2 em {
-      color: var(--color-accent);
-      font-style: italic;
-      font-family: "Syne", sans-serif;
-      font-weight: 700;
     }
 
     .work-lede {
       max-width: 540px;
-      color: rgba(247, 251, 251, 0.62);
       font-size: clamp(14px, 1.1vw, 17px);
-      line-height: 1.6;
     }
 
     .work-cta {
@@ -1415,59 +1346,19 @@
       pointer-events: none;
     }
 
-    .value-inner {
-      position: relative;
-      z-index: 1;
-      width: min(calc(100% - 36px), 1320px);
-      margin-inline: auto;
-    }
-
     .value-header {
-      text-align: center;
       max-width: 720px;
-      margin-inline: auto;
       margin-bottom: clamp(48px, 6vw, 72px);
-      display: grid;
       gap: 18px;
-      justify-items: center;
     }
 
-    .value-kicker {
-      display: inline-flex;
-      width: fit-content;
-      min-height: 36px;
-      align-items: center;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 999px;
-      padding-inline: 14px;
-      color: rgba(247, 251, 251, 0.62);
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.22em;
-      background: rgba(255, 255, 255, 0.04);
-    }
-
-    .value-header h2 {
-      font-family: "Syne", sans-serif;
-      font-size: clamp(34px, 4.4vw, 60px);
-      font-weight: 700;
-      line-height: 1.05;
-      letter-spacing: -0.015em;
-    }
-
-    .value-header h2 em {
-      color: var(--color-accent);
-      font-style: italic;
-      font-family: "Syne", sans-serif;
-      font-weight: 700;
+    .value-header .section-title {
+      --section-title-size: clamp(34px, 4.4vw, 60px);
     }
 
     .value-lede {
       max-width: 540px;
-      color: rgba(247, 251, 251, 0.62);
       font-size: clamp(14px, 1.1vw, 17px);
-      line-height: 1.6;
     }
 
     .value-grid {
@@ -1818,22 +1709,6 @@
       display: grid;
       gap: clamp(24px, 3vw, 36px);
       justify-items: center;
-    }
-
-    .final-kicker {
-      display: inline-flex;
-      width: fit-content;
-      min-height: 36px;
-      align-items: center;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 999px;
-      padding-inline: 14px;
-      color: rgba(247, 251, 251, 0.62);
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.22em;
-      background: rgba(255, 255, 255, 0.04);
     }
 
     /* Countdown stage */
@@ -2296,9 +2171,9 @@
     </section>
 
     <section class="first-impression" id="first-impression" aria-labelledby="impression-title">
-      <div class="impression-inner">
+      <div class="section-inner impression-inner">
         <div class="impression-copy">
-          <h2 class="impression-heading" id="impression-title">
+          <h2 class="section-title impression-heading" id="impression-title">
             <strong>X%</strong> users start their journey by searching the internet.
           </h2>
           <p class="impression-question">
@@ -2342,10 +2217,10 @@
 
     <!-- Section 3: Services Pathway -->
     <section class="services-pathway" id="services-pathway" aria-labelledby="pathway-title">
-      <div class="pathway-inner">
-        <div class="pathway-header">
-          <h2 id="pathway-title">Apa yang <em>Anda</em> butuhkan?</h2>
-          <p>Mulai dari konsep, desain, development, hingga maintenance — kami siap membantu segala kebutuhan website Anda dengan proses yang tenang, jelas, dan terasa premium.</p>
+      <div class="section-inner pathway-inner">
+        <div class="section-header pathway-header">
+          <h2 class="section-title" id="pathway-title">Apa yang <em>Anda</em> butuhkan?</h2>
+          <p class="section-lede">Mulai dari konsep, desain, development, hingga maintenance — kami siap membantu segala kebutuhan website Anda dengan proses yang tenang, jelas, dan terasa premium.</p>
         </div>
 
         <div class="pathway-grid">
@@ -2390,10 +2265,10 @@
 
     <!-- Section 4: Social Proof -->
     <section class="social-proof" id="social-proof" aria-labelledby="proof-title">
-      <div class="proof-inner">
-        <div class="proof-header">
-          <h2 id="proof-title">Dipercaya oleh brand <em>terkemuka</em><br>di berbagai industri.</h2>
-          <p class="proof-lede">Dari startup yang sedang bertumbuh hingga perusahaan mapan, kami telah membantu mereka membangun kehadiran digital yang berkesan—dan mengubah pengunjung pertama menjadi pelanggan jangka panjang.</p>
+      <div class="section-inner proof-inner">
+        <div class="section-header proof-header">
+          <h2 class="section-title" id="proof-title">Dipercaya oleh brand <em>terkemuka</em><br>di berbagai industri.</h2>
+          <p class="section-lede proof-lede">Dari startup yang sedang bertumbuh hingga perusahaan mapan, kami telah membantu mereka membangun kehadiran digital yang berkesan—dan mengubah pengunjung pertama menjadi pelanggan jangka panjang.</p>
         </div>
 
         <div class="proof-logos" aria-label="Daftar klien">
@@ -2468,10 +2343,10 @@
 
     <!-- Section 5: Proof of Work -->
     <section class="proof-of-work" id="proof-of-work" aria-labelledby="work-title">
-      <div class="work-inner">
-        <div class="work-header">
-          <h2 id="work-title">Setiap proyek adalah cerita.<br><em>Lihat hasil kerja kami.</em></h2>
-          <p class="work-lede">Kami tidak mengejar volume atau eksposur—setiap website kami rancang sebagai studi kasus tersendiri, dengan detail yang dipikirkan dan hasil yang bisa diukur.</p>
+      <div class="section-inner work-inner">
+        <div class="section-header work-header">
+          <h2 class="section-title" id="work-title">Setiap proyek adalah cerita.<br><em>Lihat hasil kerja kami.</em></h2>
+          <p class="section-lede work-lede">Kami tidak mengejar volume atau eksposur—setiap website kami rancang sebagai studi kasus tersendiri, dengan detail yang dipikirkan dan hasil yang bisa diukur.</p>
           <a class="work-cta" href="#">View Portfolio</a>
         </div>
 
@@ -2566,10 +2441,10 @@
 
     <!-- Section 6: Our Value -->
     <section class="our-value" id="our-value" aria-labelledby="value-title">
-      <div class="value-inner">
-        <div class="value-header">
-          <h2 id="value-title">Apa yang membuat kami <em>berbeda.</em></h2>
-          <p class="value-lede">Empat hal yang menjadi pegangan setiap kali kami merancang dan merawat website klien — bukan janji, tapi cara kerja.</p>
+      <div class="section-inner value-inner">
+        <div class="section-header value-header">
+          <h2 class="section-title" id="value-title">Apa yang membuat kami <em>berbeda.</em></h2>
+          <p class="section-lede value-lede">Empat hal yang menjadi pegangan setiap kali kami merancang dan merawat website klien — bukan janji, tapi cara kerja.</p>
         </div>
 
         <div class="value-grid">
