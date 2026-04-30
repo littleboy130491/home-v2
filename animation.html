@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Advanced Sphere Desktop Scroll Animation</title>
+
+  <style>
+    :root {
+      --bg: #02070a;
+      --cyan: #3ac7df;
+      --gold: #e8c547;
+      --white: #f7fbfb;
+
+      --sphere-x: 50vw;
+      --sphere-y: 45vh;
+      --sphere-scale: 1;
+      --sphere-opacity: 1;
+      --sphere-rotate: 0deg;
+
+      --desktop-y: 0px;
+      --desktop-scale: 1;
+      --desktop-opacity: 1;
+      --desktop-awake: 0;
+
+      --section2-opacity: 0;
+      --section2-y: 60px;
+
+      --cards-opacity: 0;
+      --cards-gap: 0px;
+      --cards-scale: 0.72;
+      --card-left-x: 0px;
+      --card-mid-x: 0px;
+      --card-right-x: 0px;
+
+      --section3-opacity: 0;
+      --section3-y: 60px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      background: var(--bg);
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 50% 20%, rgba(58, 199, 223, 0.18), transparent 34%),
+        linear-gradient(180deg, #063852 0%, #041621 36%, #02070a 100%);
+      color: var(--white);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      background-image:
+        linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size: 64px 64px;
+      mask-image: radial-gradient(circle at 50% 45%, black, transparent 76%);
+    }
+
+    .scroll-stage {
+      position: relative;
+      height: 430vh;
+    }
+
+    .fixed-world {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .scene-copy {
+      position: fixed;
+      left: 50%;
+      top: 14vh;
+      width: min(calc(100vw - 40px), 980px);
+      transform: translateX(-50%);
+      text-align: center;
+      z-index: 12;
+    }
+
+    .hero-copy {
+      opacity: var(--hero-opacity, 1);
+      transform: translateY(var(--hero-y, 0px));
+      will-change: opacity, transform;
+    }
+
+    .hero-copy h1,
+    .section-copy h2 {
+      font-size: clamp(48px, 8vw, 118px);
+      line-height: .9;
+      letter-spacing: -0.07em;
+      font-weight: 760;
+    }
+
+    .hero-copy p,
+    .section-copy p {
+      max-width: 620px;
+      margin: 22px auto 0;
+      color: rgba(247,251,251,.68);
+      font-size: clamp(16px, 1.4vw, 20px);
+      line-height: 1.55;
+    }
+
+    .section2-copy {
+      opacity: var(--section2-opacity);
+      transform: translateY(var(--section2-y));
+      will-change: opacity, transform;
+    }
+
+    .section3-copy {
+      top: 12vh;
+      opacity: var(--section3-opacity);
+      transform: translateX(-50%) translateY(var(--section3-y));
+      will-change: opacity, transform;
+    }
+
+    .section-copy em {
+      color: var(--gold);
+      font-style: italic;
+    }
+
+    .sphere {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: clamp(170px, 22vw, 320px);
+      aspect-ratio: 1;
+      z-index: 20;
+      opacity: var(--sphere-opacity);
+      transform:
+        translate3d(var(--sphere-x), var(--sphere-y), 0)
+        translate(-50%, -50%)
+        rotate(var(--sphere-rotate))
+        scale(var(--sphere-scale));
+      filter: drop-shadow(0 0 72px rgba(58,199,223,.48));
+      will-change: transform, opacity, filter;
+    }
+
+    .sphere::before,
+    .sphere::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+    }
+
+    .sphere::before {
+      background:
+        radial-gradient(circle at 42% 38%, rgba(255,255,255,.96) 0 5%, rgba(214,245,252,.58) 8%, rgba(58,199,223,.22) 28%, rgba(58,199,223,.06) 55%, transparent 75%);
+      box-shadow:
+        inset -24px -32px 70px rgba(0, 13, 20, .52),
+        inset 20px 22px 50px rgba(255,255,255,.18),
+        0 0 120px rgba(58,199,223,.38),
+        0 0 220px rgba(232,197,71,.12);
+      animation: breathe 4.8s ease-in-out infinite;
+    }
+
+    .sphere::after {
+      inset: -4%;
+      border: 1px solid rgba(191,244,255,.28);
+      background: conic-gradient(from 210deg, transparent 0deg, rgba(191,244,255,.78) 42deg, transparent 96deg, transparent 230deg, rgba(232,197,71,.34) 276deg, transparent 330deg);
+      mask: radial-gradient(circle, transparent 61%, black 63%, black 66%, transparent 68%);
+      -webkit-mask: radial-gradient(circle, transparent 61%, black 63%, black 66%, transparent 68%);
+      animation: spin 10s linear infinite;
+    }
+
+    .sphere-ring {
+      position: absolute;
+      inset: 15%;
+      border-radius: 50%;
+      border: 1px dashed rgba(247,251,251,.20);
+      animation: spinReverse 18s linear infinite;
+    }
+
+    .sphere-core {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 13%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      box-shadow: 0 0 32px white, 0 0 76px rgba(58,199,223,.8);
+      animation: pulse 2.4s ease-in-out infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes spinReverse { to { transform: rotate(-360deg); } }
+    @keyframes pulse { 50% { transform: translate(-50%, -50%) scale(1.35); opacity: .72; } }
+    @keyframes breathe { 50% { filter: brightness(1.2); } }
+
+    .desktop-wrap {
+      position: fixed;
+      left: 50%;
+      top: 56vh;
+      width: min(calc(100vw - 44px), 760px);
+      transform: translate(-50%, -50%) translateY(var(--desktop-y)) scale(var(--desktop-scale));
+      opacity: var(--desktop-opacity);
+      z-index: 11;
+      will-change: transform, opacity;
+      perspective: 1400px;
+    }
+
+    .desktop {
+      position: relative;
+      width: 100%;
+      transform-style: preserve-3d;
+    }
+
+    .screen {
+      position: relative;
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+      border-radius: 28px;
+      border: 1px solid rgba(255,255,255,.18);
+      background:
+        radial-gradient(circle at 58% 44%, rgba(58,199,223, calc(var(--desktop-awake) * .32)), transparent 28%),
+        radial-gradient(circle at 72% 22%, rgba(232,197,71, calc(var(--desktop-awake) * .28)), transparent 24%),
+        linear-gradient(135deg, #050707 0%, #020404 62%, #000 100%);
+      box-shadow:
+        0 60px 130px rgba(0,0,0,.62),
+        0 0 calc(var(--desktop-awake) * 100px) rgba(58,199,223,.34),
+        inset 0 0 calc(var(--desktop-awake) * 80px) rgba(58,199,223,.13),
+        0 0 0 10px rgba(255,255,255,.035);
+      transition: box-shadow .18s linear;
+    }
+
+    .screen::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: calc(.12 + var(--desktop-awake) * .68);
+      background:
+        linear-gradient(120deg, rgba(255,255,255,.18), transparent 35%),
+        repeating-linear-gradient(90deg, rgba(255,255,255,.025) 0 1px, transparent 1px 28px);
+      z-index: 3;
+    }
+
+    .screen::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: var(--desktop-awake);
+      background: radial-gradient(circle at 50% 48%, rgba(255,255,255,.86) 0 3%, rgba(191,244,255,.64) 8%, rgba(58,199,223,.28) 20%, transparent 46%);
+      mix-blend-mode: screen;
+      z-index: 4;
+    }
+
+    .browser-bar {
+      position: absolute;
+      inset: 0 0 auto;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-inline: 18px;
+      background: rgba(255,255,255,.06);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      opacity: var(--desktop-awake);
+      transform: translateY(calc((1 - var(--desktop-awake)) * -16px));
+      z-index: 5;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(247,251,251,.4);
+    }
+
+    .address {
+      width: 42%;
+      height: 18px;
+      margin-left: 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.10);
+    }
+
+    .site-ui {
+      position: absolute;
+      inset: 48px 0 0;
+      display: grid;
+      grid-template-columns: .92fr 1.08fr;
+      gap: 28px;
+      padding: clamp(24px, 4vw, 46px);
+      opacity: var(--desktop-awake);
+      filter: blur(calc((1 - var(--desktop-awake)) * 9px));
+      transform: translateY(calc((1 - var(--desktop-awake)) * 22px)) scale(calc(.96 + var(--desktop-awake) * .04));
+      z-index: 6;
+    }
+
+    .ui-copy {
+      display: grid;
+      align-content: end;
+      gap: 14px;
+    }
+
+    .line {
+      display: block;
+      height: 34px;
+      border-radius: 999px;
+      background: rgba(247,251,251,.88);
+    }
+
+    .line.small {
+      width: 62%;
+      background: var(--gold);
+    }
+
+    .line.muted {
+      height: 9px;
+      width: 86%;
+      background: rgba(247,251,251,.22);
+    }
+
+    .line.muted.short {
+      width: 54%;
+    }
+
+    .ui-panel {
+      min-height: 230px;
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,.10);
+      background:
+        radial-gradient(circle at 50% 36%, rgba(58,199,223,.34), transparent 34%),
+        rgba(255,255,255,.055);
+      backdrop-filter: blur(18px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ui-panel::before,
+    .ui-panel::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.16);
+    }
+
+    .ui-panel::before {
+      inset: 22%;
+    }
+
+    .ui-panel::after {
+      inset: 38%;
+      border: 0;
+      background: radial-gradient(circle, rgba(232,197,71,.9), rgba(232,197,71,.12) 48%, transparent 72%);
+      box-shadow: 0 0 54px rgba(232,197,71,.36);
+    }
+
+    .stand {
+      width: 28%;
+      height: 74px;
+      margin: -1px auto 0;
+      background: linear-gradient(90deg, rgba(255,255,255,.08), rgba(255,255,255,.24), rgba(255,255,255,.08));
+      clip-path: polygon(36% 0, 64% 0, 78% 100%, 22% 100%);
+      opacity: .75;
+    }
+
+    .base {
+      width: 54%;
+      height: 16px;
+      margin: 0 auto;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(255,255,255,.06), rgba(255,255,255,.28), rgba(255,255,255,.06));
+      box-shadow: 0 18px 44px rgba(0,0,0,.36);
+    }
+
+    .cards-stage {
+      position: fixed;
+      inset: 0;
+      z-index: 14;
+      opacity: var(--cards-opacity);
+      pointer-events: none;
+      will-change: opacity;
+    }
+
+    .path-card {
+      position: absolute;
+      top: 58vh;
+      left: 50%;
+      width: clamp(190px, 23vw, 330px);
+      aspect-ratio: 3 / 4;
+      overflow: hidden;
+      border-radius: 30px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: #07151f;
+      box-shadow: 0 36px 90px rgba(0,0,0,.46), 0 0 54px rgba(58,199,223,.10);
+      transform:
+        translate(calc(-50% + var(--card-x)), -50%)
+        scale(var(--cards-scale));
+      will-change: transform;
+    }
+
+    .path-card:nth-child(1) { --card-x: var(--card-left-x); }
+    .path-card:nth-child(2) { --card-x: var(--card-mid-x); }
+    .path-card:nth-child(3) { --card-x: var(--card-right-x); }
+
+    .path-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 50% 18%, rgba(58,199,223,.34), transparent 36%),
+        linear-gradient(180deg, #0a2737 0%, #06141c 62%, #02070a 100%);
+    }
+
+    .path-card:nth-child(2)::before {
+      background:
+        radial-gradient(circle at 50% 18%, rgba(232,197,71,.25), transparent 36%),
+        linear-gradient(180deg, #182d37 0%, #071822 62%, #02070a 100%);
+    }
+
+    .path-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(2,7,10,.96), rgba(2,7,10,.42), transparent);
+    }
+
+    .path-card-content {
+      position: absolute;
+      z-index: 2;
+      inset: auto 0 0;
+      padding: 30px;
+    }
+
+    .path-card span {
+      display: inline-flex;
+      margin-bottom: 12px;
+      color: rgba(247,251,251,.44);
+      font-size: 11px;
+      font-weight: 780;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+
+    .path-card h3 {
+      font-size: clamp(28px, 3vw, 42px);
+      line-height: 1;
+      letter-spacing: -.035em;
+    }
+
+    .path-card p {
+      margin-top: 12px;
+      color: rgba(247,251,251,.62);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .section-spacer {
+      height: 100vh;
+    }
+
+    .progress-hint {
+      position: fixed;
+      left: 50%;
+      bottom: 28px;
+      z-index: 40;
+      transform: translateX(-50%);
+      color: rgba(247,251,251,.46);
+      font-size: 12px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+
+    .debug-panel {
+      position: fixed;
+      left: 18px;
+      bottom: 18px;
+      z-index: 60;
+      width: min(360px, calc(100vw - 36px));
+      padding: 16px;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 20px;
+      background: rgba(2, 7, 10, .68);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 24px 80px rgba(0,0,0,.34);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .debug-panel strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 12px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .debug-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding-block: 5px;
+      border-top: 1px solid rgba(255,255,255,.08);
+      color: rgba(247,251,251,.66);
+    }
+
+    .debug-row:first-of-type {
+      border-top: 0;
+    }
+
+    .debug-row span:last-child {
+      color: rgba(247,251,251,.94);
+      text-align: right;
+    }
+
+    .debug-note {
+      margin-top: 10px;
+      color: rgba(247,251,251,.52);
+    }
+
+    .debug-vars {
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255,255,255,.10);
+    }
+
+    .debug-vars-title {
+      margin-bottom: 6px;
+      color: rgba(247,251,251,.78);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .debug-var-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      padding-block: 3px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 11px;
+      color: rgba(247,251,251,.54);
+    }
+
+    .debug-var-row span:last-child {
+      color: rgba(247,251,251,.92);
+    }
+
+    .hint-label {
+      position: fixed;
+      z-index: 55;
+      max-width: 230px;
+      padding: 10px 12px;
+      border: 1px solid rgba(255,255,255,.13);
+      border-radius: 14px;
+      background: rgba(2, 7, 10, .62);
+      backdrop-filter: blur(14px);
+      color: rgba(247,251,251,.72);
+      font-size: 12px;
+      line-height: 1.35;
+      pointer-events: none;
+      opacity: .92;
+    }
+
+    .hint-label b {
+      display: block;
+      margin-bottom: 3px;
+      color: #fff;
+      font-size: 12px;
+    }
+
+    .hint-sphere {
+      left: calc(var(--sphere-x) + 82px);
+      top: calc(var(--sphere-y) - 74px);
+      transform: translateY(-50%);
+      opacity: calc(var(--sphere-opacity) * .95);
+    }
+
+    .hint-desktop {
+      right: 22px;
+      top: 52vh;
+      transform: translateY(-50%);
+      opacity: calc(.28 + var(--desktop-opacity) * .72);
+    }
+
+    .hint-cards {
+      right: 22px;
+      top: 74vh;
+      transform: translateY(-50%);
+      opacity: var(--cards-opacity);
+    }
+
+    @media (max-width: 760px) {
+      .scene-copy {
+        top: 10vh;
+      }
+
+      .desktop-wrap {
+        top: 58vh;
+        width: min(calc(100vw - 28px), 560px);
+      }
+
+      .site-ui {
+        grid-template-columns: 1fr;
+      }
+
+      .ui-panel {
+        display: none;
+      }
+
+      .path-card {
+        width: min(72vw, 280px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="scroll-stage" id="stage">
+    <div class="fixed-world" aria-hidden="true">
+      <div class="scene-copy hero-copy" id="heroCopy">
+        <h1>Hero</h1>
+        <p>A glowing idea object appears first. It attracts attention before guiding the audience deeper into the website story.</p>
+      </div>
+
+      <div class="scene-copy section-copy section2-copy" id="section2Copy">
+        <h2>Double</h2>
+        <p>The sphere enters the desktop, wakes the interface, and turns a silent screen into a living digital experience.</p>
+      </div>
+
+      <div class="scene-copy section-copy section3-copy" id="section3Copy">
+        <h2>Choose your <em>pathway.</em></h2>
+        <p>The desktop splits into three focused directions: build new, redesign, or long-term partnership.</p>
+      </div>
+
+      <div class="sphere" id="sphere">
+        <span class="sphere-ring"></span>
+        <span class="sphere-core"></span>
+      </div>
+
+      <div class="desktop-wrap" id="desktopWrap">
+        <div class="desktop">
+          <div class="screen">
+            <div class="browser-bar">
+              <span class="dot"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+              <span class="address"></span>
+            </div>
+            <div class="site-ui">
+              <div class="ui-copy">
+                <span class="line"></span>
+                <span class="line small"></span>
+                <span class="line muted"></span>
+                <span class="line muted short"></span>
+              </div>
+              <div class="ui-panel"></div>
+            </div>
+          </div>
+          <div class="stand"></div>
+          <div class="base"></div>
+        </div>
+      </div>
+
+      <div class="cards-stage" id="cardsStage">
+        <article class="path-card">
+          <div class="path-card-content">
+            <span>01</span>
+            <h3>Build New</h3>
+            <p>Create a custom website from zero with a strong concept and scalable structure.</p>
+          </div>
+        </article>
+        <article class="path-card">
+          <div class="path-card-content">
+            <span>02</span>
+            <h3>Redesign</h3>
+            <p>Upgrade an existing website into something clearer, faster, and more trustworthy.</p>
+          </div>
+        </article>
+        <article class="path-card">
+          <div class="path-card-content">
+            <span>03</span>
+            <h3>Partnership</h3>
+            <p>Continue improving the website through support, maintenance, and feature development.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <section class="section-spacer" aria-label="Section 1"></section>
+    <section class="section-spacer" aria-label="Section 2"></section>
+    <section class="section-spacer" aria-label="Transition"></section>
+    <section class="section-spacer" aria-label="Section 3"></section>
+  </main>
+
+  <div class="hint-label hint-sphere">
+    <b>Fixed sphere</b>
+    It never scrolls naturally. JS changes its x/y, scale, rotation, and opacity.
+  </div>
+
+  <div class="hint-label hint-desktop">
+    <b>Fixed desktop</b>
+    The desktop also stays fixed. JS changes its opacity, scale, and “awake” glow.
+  </div>
+
+  <div class="hint-label hint-cards">
+    <b>Card split illusion</b>
+    The desktop fades while 3 fixed cards spread outward from the same center.
+  </div>
+
+  <div class="debug-panel">
+    <strong>Scroll Animation State</strong>
+    <div class="debug-row"><span>Progress</span><span id="debugProgress">0%</span></div>
+    <div class="debug-row"><span>Active phase</span><span id="debugPhase">Hero</span></div>
+    <div class="debug-row"><span>Sphere</span><span id="debugSphere">Fixed / visible</span></div>
+    <div class="debug-row"><span>Desktop</span><span id="debugDesktop">Hidden</span></div>
+    <div class="debug-row"><span>Cards</span><span id="debugCards">Not active</span></div>
+    <div class="debug-vars">
+      <div class="debug-vars-title">Changing properties</div>
+      <div class="debug-var-row"><span>--sphere-x</span><span id="varSphereX">0px</span></div>
+      <div class="debug-var-row"><span>--sphere-y</span><span id="varSphereY">0px</span></div>
+      <div class="debug-var-row"><span>--sphere-scale</span><span id="varSphereScale">1</span></div>
+      <div class="debug-var-row"><span>--sphere-opacity</span><span id="varSphereOpacity">1</span></div>
+      <div class="debug-var-row"><span>--desktop-opacity</span><span id="varDesktopOpacity">0</span></div>
+      <div class="debug-var-row"><span>--desktop-awake</span><span id="varDesktopAwake">0</span></div>
+      <div class="debug-var-row"><span>--cards-opacity</span><span id="varCardsOpacity">0</span></div>
+      <div class="debug-var-row"><span>--card-left-x</span><span id="varCardLeftX">0px</span></div>
+      <div class="debug-var-row"><span>--card-right-x</span><span id="varCardRightX">0px</span></div>
+    </div>
+    <p class="debug-note">Scroll updates these variables every frame. CSS reads them through var(...) inside transform, opacity, glow, and blur.</p>
+  </div>
+
+  <div class="progress-hint">Scroll</div>
+
+  <script>
+    const root = document.documentElement;
+    const stage = document.getElementById('stage');
+    const debugProgress = document.getElementById('debugProgress');
+    const debugPhase = document.getElementById('debugPhase');
+    const debugSphere = document.getElementById('debugSphere');
+    const debugDesktop = document.getElementById('debugDesktop');
+    const debugCards = document.getElementById('debugCards');
+    const varSphereX = document.getElementById('varSphereX');
+    const varSphereY = document.getElementById('varSphereY');
+    const varSphereScale = document.getElementById('varSphereScale');
+    const varSphereOpacity = document.getElementById('varSphereOpacity');
+    const varDesktopOpacity = document.getElementById('varDesktopOpacity');
+    const varDesktopAwake = document.getElementById('varDesktopAwake');
+    const varCardsOpacity = document.getElementById('varCardsOpacity');
+    const varCardLeftX = document.getElementById('varCardLeftX');
+    const varCardRightX = document.getElementById('varCardRightX');
+
+    const clamp = (value, min = 0, max = 1) => Math.min(Math.max(value, min), max);
+    const lerp = (a, b, t) => a + (b - a) * t;
+    const easeInOut = t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    const easeOut = t => 1 - Math.pow(1 - t, 3);
+
+    function setVar(name, value) {
+      root.style.setProperty(name, value);
+    }
+
+    function px(value) {
+      return `${value}px`;
+    }
+
+    function animate() {
+      const rect = stage.getBoundingClientRect();
+      const total = stage.offsetHeight - window.innerHeight;
+      const scrollInside = clamp(-rect.top / total, 0, 1);
+
+      const vh = window.innerHeight;
+      const vw = window.innerWidth;
+
+      // Timeline ranges
+      const p1 = clamp(scrollInside / 0.25);                    // Section 1 → section 2
+      const p2 = clamp((scrollInside - 0.20) / 0.22);           // Sphere enters desktop
+      const p3 = clamp((scrollInside - 0.44) / 0.18);           // Section 2 copy fades away
+      const p4 = clamp((scrollInside - 0.58) / 0.25);           // Desktop splits into cards
+      const p5 = clamp((scrollInside - 0.72) / 0.18);           // Section 3 copy appears
+
+      const e1 = easeInOut(p1);
+      const e2 = easeOut(p2);
+      const e3 = easeOut(p3);
+      const e4 = easeInOut(p4);
+      const e5 = easeOut(p5);
+
+      // Section 1: hero text fades away while sphere travels down to the desktop
+      setVar('--hero-opacity', String(1 - clamp(p1 * 1.25)));
+      setVar('--hero-y', px(lerp(0, -70, e1)));
+
+      // Sphere path: from hero focal point to desktop screen center
+      const startX = vw * 0.50;
+      const startY = vh * 0.44;
+      const screenX = vw * 0.50;
+      const screenY = vh * 0.53;
+
+      // During section 3, sphere is gone because it has entered the desktop
+      const sphereX = lerp(startX, screenX, e1);
+      const sphereY = lerp(startY, screenY, e1);
+      const sphereScale = lerp(1, 0.22, e2);
+      const sphereOpacity = 1 - e2;
+      const sphereRotate = scrollInside * 920;
+
+      setVar('--sphere-x', px(sphereX));
+      setVar('--sphere-y', px(sphereY));
+      setVar('--sphere-scale', String(sphereScale));
+      setVar('--sphere-opacity', String(sphereOpacity));
+      setVar('--sphere-rotate', `${sphereRotate}deg`);
+
+      // Desktop appears after hero, then wakes up when sphere enters
+      const desktopBaseOpacity = clamp((p1 - 0.16) / 0.54);
+      const desktopY = lerp(90, 0, easeOut(clamp((p1 - 0.06) / 0.78)));
+      const desktopScale = lerp(0.86, 1, easeOut(clamp((p1 - 0.04) / 0.72)));
+      const desktopAwake = e2;
+
+      setVar('--desktop-opacity', String(desktopBaseOpacity));
+      setVar('--desktop-y', px(desktopY));
+      setVar('--desktop-scale', String(desktopScale));
+      setVar('--desktop-awake', String(desktopAwake));
+
+      // Section 2 copy comes in after desktop turns on, then fades away during transition to section 3
+      const section2In = clamp((p2 - 0.38) / 0.56);
+      setVar('--section2-opacity', String(section2In * (1 - e3)));
+      setVar('--section2-y', px(lerp(60, 0, easeOut(section2In)) + lerp(0, -48, e3)));
+
+      // Transition to Section 3: desktop stays visually fixed while copy disappears
+      // Then desktop dissolves into 3 cards
+      const cardsOpacity = e4;
+      const desktopFinalOpacity = clamp(desktopBaseOpacity * (1 - clamp((p4 - 0.15) / 0.70)), 0, 1);
+      setVar('--cards-opacity', String(cardsOpacity));
+      setVar('--desktop-opacity', String(desktopFinalOpacity));
+
+      const maxSpread = Math.min(vw * 0.30, 380);
+      const cardLeftX = lerp(0, -maxSpread, e4);
+      const cardRightX = lerp(0, maxSpread, e4);
+      const cardsScale = lerp(0.72, 1, e4);
+
+      setVar('--card-left-x', px(cardLeftX));
+      setVar('--card-mid-x', px(0));
+      setVar('--card-right-x', px(cardRightX));
+      setVar('--cards-scale', String(cardsScale));
+
+      // Section 3 heading and description appear after split is readable
+      setVar('--section3-opacity', String(e5));
+      setVar('--section3-y', px(lerp(60, 0, e5)));
+
+      let phase = 'Hero / sphere introduction';
+      if (p1 > 0.2) phase = 'Sphere travels toward desktop';
+      if (p2 > 0.25) phase = 'Sphere enters desktop';
+      if (p3 > 0.25) phase = 'Section 2 copy fades away';
+      if (p4 > 0.18) phase = 'Desktop splits into cards';
+      if (p5 > 0.28) phase = 'Section 3 appears';
+
+      debugProgress.textContent = `${Math.round(scrollInside * 100)}%`;
+      debugPhase.textContent = phase;
+      debugSphere.textContent = p2 < 0.15
+        ? 'Fixed / moving by transform'
+        : p2 < 0.95
+          ? 'Shrinking + fading'
+          : 'Gone inside desktop';
+      debugDesktop.textContent = p1 < 0.18
+        ? 'Hidden'
+        : p2 < 0.2
+          ? 'Appearing fixed'
+          : p3 < 0.9
+            ? `Awake ${Math.round(e2 * 100)}%`
+            : 'Fixed while text fades';
+      debugCards.textContent = p4 < 0.15
+        ? 'Not active'
+        : p4 < 0.95
+          ? 'Spreading outward'
+          : 'Visible pathway cards';
+
+      varSphereX.textContent = `${Math.round(sphereX)}px`;
+      varSphereY.textContent = `${Math.round(sphereY)}px`;
+      varSphereScale.textContent = sphereScale.toFixed(2);
+      varSphereOpacity.textContent = sphereOpacity.toFixed(2);
+      varDesktopOpacity.textContent = desktopFinalOpacity.toFixed(2);
+      varDesktopAwake.textContent = desktopAwake.toFixed(2);
+      varCardsOpacity.textContent = cardsOpacity.toFixed(2);
+      varCardLeftX.textContent = `${Math.round(cardLeftX)}px`;
+      varCardRightX.textContent = `${Math.round(cardRightX)}px`;
+
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  </script>
+</body>
+</html>
