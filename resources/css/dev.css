@@ -1,0 +1,18 @@
+:root {
+    --primary-color-bg: #062433;
+}
+
+section:not(:has(*)), 
+header:not(:has(*)), 
+footer:not(:has(*)), 
+main:not(:has(*)) {
+    min-height: 80px;
+    background-color: azure;
+    border: 1px solid black;
+}
+
+div:not(:has(*)) {
+    min-height: 40px;
+    background-color: aquamarine;
+    border: 1px dotted black;
+}
