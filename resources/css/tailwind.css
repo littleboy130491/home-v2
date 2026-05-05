@@ -1,0 +1,106 @@
+:root {
+  --primary-color-bg: #062433;
+  --heading-font-family: "Plus Jakarta Sans", sans-serif;
+  --heading-weight: 500;
+  --device-color-bg: black;
+}
+
+.site-logo {
+  max-width: 10rem;
+}
+
+.container {
+  max-width: 80rem;
+  margin-inline: auto;
+}
+
+.content-box {
+  padding-block: 4rem;
+}
+
+header .container {
+  padding-block: 0;
+  min-height: auto;
+}
+
+#hero .container {
+  min-height: 56rem;
+  padding-block: 4rem;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--heading-font-family);
+  font-weight: var(--heading-weight);
+}
+
+h1 {
+  font-size: 3rem;
+  line-height: 3rem;
+}
+
+h2 {
+  font-size: 2.25rem;
+}
+
+h3 {
+  font-size: 1.4rem;
+}
+
+p {
+  font-size: 1.25rem;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background-color: var(--primary-color-bg);
+  color: white;
+  border-radius: 0.375rem;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.flow > h1 + p,
+.flow > h2 + p,
+.flow > h3 + p,
+.flow > h4 + p,
+.flow > h5 + p,
+.flow > h6 + p {
+  margin-top: 1.5rem;
+}
+
+.flow > p + .btn {
+  margin-top: 1.5rem;
+}
+
+.text-measure > h2 {
+  max-width: 56ch;
+  margin-inline: auto;
+}
+
+.text-measure > p {
+  max-width: 56ch;
+  margin-inline: auto;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  padding: 40px;
+  background-color: #062433;
+  color: aliceblue;
+}
+.card > p {
+  font-size: 1rem;
+  margin-top: 24px;
+}
+
+.card > .link {
+  font-size: 1rem;
+  margin-top: 24px;
+}

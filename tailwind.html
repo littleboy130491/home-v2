@@ -5,39 +5,117 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Imajiner - Low Fidelity Wireframe</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./resources/css/dev.css">
-
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./resources/css/dev.css" />
+    <link rel="stylesheet" href="./resources/css/tailwind.css" />
   </head>
   <body>
-   <header class="bg-(--primary-color-bg) text-white py-4">
-    <div class="w-6xl mx-auto grid grid-cols-3 gap-4 items-center">
-        <div class="w-2xs" id="logo">
-            <a href="#">
-            <img src="./resources/Logo Imajiner - White.png">
-            </a>
+    <header class="bg-(--primary-color-bg) text-white py-4">
+      <div class="container grid grid-cols-3 gap-4 items-center">
+        <div class="site-logo" id="site-logo">
+          <a href="#">
+            <img src="./resources/Logo Imajiner - White.png" />
+          </a>
         </div>
-        
+
         <nav class="flex gap-4 justify-center">
-<a href="#">Home</a>
-      <a href="#">Services</a>
-      <a href="#">Portfolio</a>
-      <a href="#">Pricing</a>
-      <a href="#">FAQ</a>
+          <a href="#">Home</a>
+          <a href="#">Services</a>
+          <a href="#">Portfolio</a>
+          <a href="#">Pricing</a>
+          <a href="#">FAQ</a>
         </nav>
         <div class="flex justify-end">
-            <a class="btn" href="#">Contact us</a>
+          <a class="btn" href="#">Contact us</a>
         </div>
-    </div>
+      </div>
     </header>
     <main>
-
+      <div
+        id="hero-sphere"
+        class="pointer-events-none fixed z-10 left-[44%] top-[15%]"
+      >
+        <img class="w-[300px]" src="./resources/sphere-cropped.png" />
+      </div>
+      <section
+        id="hero"
+        class="bg-[url(./resources/man-flipped.jpg)] bg-right text-white"
+      >
+        <div class="container flex">
+          <div class="flow basis-1/2 self-end">
+            <h1>Where website meets creativity</h1>
+            <p>
+              Design, development, and maintenance for brands that need a
+              website with presence, clarity, and business direction.
+            </p>
+            <a class="btn" href="#">Get Started</a>
+          </div>
+        </div>
+      </section>
+      <section id="section-2">
+        <div class="container content-box flow text-measure text-center">
+          <h2>
+            <strong>X%</strong> users start their journey by searching the
+            internet.
+          </h2>
+          <p>
+            So your website often becomes their first impression. The question
+            is, has it helped you or not?
+          </p>
+          <div
+            id="device"
+            class="w-4xl mx-auto bg-(--device-color-bg) min-h-[400px] mt-40"
+          ></div>
+        </div>
+      </section>
+      <section id="journey">
+        <div class="container content-box">
+          <div class="flow text-measure text-center">
+            <h2>Apa yang Anda butuhkan?</h2>
+            <p>
+              Kami menyediakan layanan desain, pengembangan, dan pemeliharaan
+              website untuk membantu Anda membangun kehadiran online yang kuat
+              dan efektif.
+            </p>
+          </div>
+          <div id="card-wrapper" class="flex gap-8 mt-40">
+            <div class="card">
+              <h3>Buat baru</h3>
+              <p>
+                Bangun website dari nol dengan konsep kuat, desain khas, dan
+                arsitektur yang siap bertumbuh bersama bisnis Anda.
+              </p>
+              <a href="#" class="link">Pelajari Lebih Lanjut</a>
+            </div>
+            <div class="card">
+              <h3>Buat baru</h3>
+              <p>
+                Bangun website dari nol dengan konsep kuat, desain khas, dan
+                arsitektur yang siap bertumbuh bersama bisnis Anda.
+              </p>
+              <a href="#" class="link">Pelajari Lebih Lanjut</a>
+            </div>
+            <div class="card">
+              <h3>Buat baru</h3>
+              <p>
+                Bangun website dari nol dengan konsep kuat, desain khas, dan
+                arsitektur yang siap bertumbuh bersama bisnis Anda.
+              </p>
+              <a href="#" class="link">Pelajari Lebih Lanjut</a>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
-    <footer>
-
-    </footer>
+    <footer></footer>
   </body>
 </html>
