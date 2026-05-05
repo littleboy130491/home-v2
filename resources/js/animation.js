@@ -5,12 +5,14 @@ const section2 = document.querySelector("#section-2");
 const section2Scroll = document.querySelector("#section-2-scroll");
 const section2Copy = document.querySelector("#section-2-copy");
 const journey = document.querySelector("#journey");
-const cardWrapper = document.querySelector("#card-wrapper");
+const cardWrapper = document.querySelector("#journey-card-wrapper");
 const journeyCards = [...document.querySelectorAll(".journey-card")];
 const device = document.querySelector("#device");
 const screen = document.querySelector(".device-screen");
 let deviceIsOn = false;
 let ticking = false;
+
+const debug = typeof updateDebug === "function" ? updateDebug : () => {};
 
 const clamp = (value, min = 0, max = 1) => Math.min(Math.max(value, min), max);
 const lerp = (start, end, progress) => start + (end - start) * progress;
@@ -122,12 +124,14 @@ function updateSphereAnimation() {
     return;
   }
 
-  const frame = getSphereFrame(getSphereProgress());
+  const sphereProgress = getSphereProgress();
+  const frame = getSphereFrame(sphereProgress);
   sphere.style.setProperty("--sphere-x", `${frame.x}px`);
   sphere.style.setProperty("--sphere-y", `${frame.y}px`);
   sphere.style.setProperty("--sphere-size", `${frame.size}px`);
   sphere.style.setProperty("--sphere-scale", frame.scale);
   sphere.style.opacity = frame.opacity;
+  debug("sphere", sphereProgress);
 }
 
 function updateHeroBackgroundFade() {
@@ -145,6 +149,7 @@ function updateHeroBackgroundFade() {
     fadeProgress,
   );
   hero.style.setProperty("--hero-bg-opacity", opacity);
+  debug("heroFade", fadeProgress);
 }
 
 function setRootProperty(name, value) {
@@ -173,13 +178,48 @@ function getJourneyEntryProgress() {
 }
 
 function getCardGap() {
-  if (!cardWrapper) {
-    return 0;
+  if (cardWrapper) {
+    const styles = window.getComputedStyle(cardWrapper);
+    const computedGap = Number.parseFloat(styles.columnGap || styles.gap);
+
+    if (computedGap > 0) {
+      return computedGap;
+    }
   }
 
-  const styles = window.getComputedStyle(cardWrapper);
+  const rootFontSize =
+    Number.parseFloat(window.getComputedStyle(root).fontSize) || 16;
+  const minGap = rootFontSize * 2.5;
+  const maxGap = rootFontSize * 4.5;
+  const viewportGap = window.innerWidth * 0.05;
 
-  return Number.parseFloat(styles.columnGap || styles.gap) || 0;
+  return Math.min(Math.max(viewportGap, minGap), maxGap);
+}
+
+function getScreenToCardOffset() {
+  if (!screen || !cardWrapper) {
+    return { x: 0, y: 0 };
+  }
+
+  const screenRect = screen.getBoundingClientRect();
+  const cardRect = cardWrapper.getBoundingClientRect();
+  const screenCenterY = screenRect.top + screenRect.height / 2;
+  const stickyCardCenterY =
+    cardWrapper.offsetTop + cardWrapper.offsetHeight / 2;
+
+  return {
+    x: cardRect.left + cardRect.width / 2 - (screenRect.left + screenRect.width / 2),
+    y: stickyCardCenterY - screenCenterY,
+  };
+}
+
+function setCardInteractivity(isInteractive) {
+  if (!cardWrapper) {
+    return;
+  }
+
+  cardWrapper.classList.toggle("is-interactive", isInteractive);
+  cardWrapper.toggleAttribute("inert", !isInteractive);
 }
 
 function updateSection2ToJourneyTransition() {
@@ -194,12 +234,24 @@ function updateSection2ToJourneyTransition() {
     setRootProperty("--section-2-copy-y", "0px");
     setRootProperty("--device-transition-scale", "1");
     setRootProperty("--device-transition-y", "0px");
+    setRootProperty("--device-transition-opacity", screenIsOn ? "1" : "0");
+    setRootProperty("--device-frame-opacity", "1");
+    setRootProperty("--device-screen-opacity", "1");
+    setRootProperty("--screen-split-opacity", "0");
+    setRootProperty("--screen-split-image-opacity", "1");
+    setRootProperty("--screen-split-x", "0px");
+    setRootProperty("--screen-split-y", "0px");
+    setRootProperty("--screen-split-gap", "0px");
+    setRootProperty("--screen-split-radius", "0px");
+    setRootProperty("--screen-split-card-opacity", "0");
+    setRootProperty("--screen-split-card-reveal", "0");
     setRootProperty("--journey-copy-opacity", screenIsOn ? "1" : "0");
     setRootProperty("--journey-copy-y", "0px");
     setRootProperty("--journey-cards-opacity", "1");
     setRootProperty("--journey-card-scale", "1");
     setRootProperty("--journey-card-y", "0px");
     setRootProperty("--journey-card-shift", "0px");
+    setCardInteractivity(screenIsOn);
     return;
   }
 
@@ -207,29 +259,60 @@ function updateSection2ToJourneyTransition() {
   const transitionProgress = ease(clamp((sectionProgress - 0.54) / 0.46));
   const copyFadeProgress = ease(clamp((transitionProgress - 0.05) / 0.52));
   const journeyProgress = getJourneyEntryProgress();
-  const cardsSpreadProgress = ease(clamp(journeyProgress / 0.82));
-  const journeyCopyProgress = screenIsOn
-    ? ease(clamp((journeyProgress - 0.34) / 0.46))
+  const deviceRevealProgress = screenIsOn
+    ? ease(clamp((sectionProgress - 0.08) / 0.18))
     : 0;
-  const cardWidth = journeyCards[0]?.getBoundingClientRect().width || 0;
-  const cardShift = (cardWidth + getCardGap()) * (1 - cardsSpreadProgress);
+  const frameExitProgress = ease(clamp((journeyProgress - 0.04) / 0.22));
+  const splitLayerProgress = ease(clamp((journeyProgress - 0.16) / 0.12));
+  const screenMoveProgress = ease(clamp((journeyProgress - 0.2) / 0.28));
+  const splitProgress = ease(clamp((journeyProgress - 0.46) / 0.28));
+  const proxyExitProgress = ease(clamp((journeyProgress - 0.66) / 0.18));
+  const cardsRevealProgress = ease(clamp((journeyProgress - 0.7) / 0.18));
+  const journeyCopyProgress = screenIsOn
+    ? ease(clamp((journeyProgress - 0.72) / 0.22))
+    : 0;
+  const screenOffset = getScreenToCardOffset();
+  const splitDistance = getCardGap();
+  const cardShift = splitDistance * splitProgress;
+  setCardInteractivity(cardsRevealProgress > 0.95);
 
   setRootProperty("--section-2-copy-opacity", 1 - copyFadeProgress);
   setRootProperty("--section-2-copy-y", `${lerp(0, -44, copyFadeProgress)}px`);
   setRootProperty("--device-transition-scale", "1");
   setRootProperty("--device-transition-y", "0px");
+  setRootProperty("--device-transition-opacity", deviceRevealProgress);
+  setRootProperty("--device-frame-opacity", 1 - frameExitProgress);
+  setRootProperty("--device-screen-opacity", 1 - splitLayerProgress);
+  setRootProperty("--screen-split-opacity", splitLayerProgress * (1 - proxyExitProgress));
+  setRootProperty("--screen-split-image-opacity", 1 - proxyExitProgress);
+  setRootProperty("--screen-split-x", `${screenOffset.x * screenMoveProgress}px`);
+  setRootProperty("--screen-split-y", `${screenOffset.y * screenMoveProgress}px`);
+  setRootProperty("--screen-split-gap", `${cardShift}px`);
+  setRootProperty("--screen-split-radius", `${lerp(0, 8, splitProgress)}px`);
+  setRootProperty("--screen-split-card-opacity", "0");
+  setRootProperty("--screen-split-card-reveal", "0");
   setRootProperty("--journey-copy-opacity", journeyCopyProgress);
   setRootProperty(
     "--journey-copy-y",
     `${lerp(48, 0, journeyCopyProgress)}px`,
   );
-  setRootProperty("--journey-cards-opacity", "1");
-  setRootProperty(
-    "--journey-card-scale",
-    lerp(0.74, 1, cardsSpreadProgress),
-  );
-  setRootProperty("--journey-card-y", `${lerp(44, 0, cardsSpreadProgress)}px`);
-  setRootProperty("--journey-card-shift", `${cardShift}px`);
+  setRootProperty("--journey-cards-opacity", cardsRevealProgress);
+  setRootProperty("--journey-card-scale", lerp(0.94, 1, cardsRevealProgress));
+  setRootProperty("--journey-card-y", `${lerp(20, 0, cardsRevealProgress)}px`);
+  setRootProperty("--journey-card-shift", "0px");
+
+  debug("section2", sectionProgress);
+  debug("transition", transitionProgress);
+  debug("copyFade", copyFadeProgress);
+  debug("journey", journeyProgress);
+  debug("deviceReveal", deviceRevealProgress);
+  debug("frameExit", frameExitProgress);
+  debug("splitLayer", splitLayerProgress);
+  debug("screenMove", screenMoveProgress);
+  debug("split", splitProgress);
+  debug("proxyExit", proxyExitProgress);
+  debug("cardsReveal", cardsRevealProgress);
+  debug("journeyCopy", journeyCopyProgress);
 }
 
 function setDevicePower(isOn) {
@@ -244,6 +327,10 @@ function setDevicePower(isOn) {
 
 function updateAnimation() {
   ticking = false;
+  debug("scrollY", window.scrollY, {
+    showRaw: true,
+    max: Math.max(1, document.documentElement.scrollHeight - window.innerHeight),
+  });
   updateHeroBackgroundFade();
   updateSphereAnimation();
 

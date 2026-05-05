@@ -47,6 +47,25 @@
       >
         <img class="w-[300px]" src="./resources/sphere-cropped.png" />
       </div>
+      <div id="device" class="mx-auto">
+        <div class="device-screen">
+          <img
+            src="https://b-cdn.imajiner.id/ssg90-ezgif.com-video-to-gif-converter.gif"
+            alt=""
+          />
+          <div id="screen-split" aria-hidden="true">
+            <div class="screen-slice screen-slice-1">
+              <div class="screen-slice-image"></div>
+            </div>
+            <div class="screen-slice screen-slice-2">
+              <div class="screen-slice-image"></div>
+            </div>
+            <div class="screen-slice screen-slice-3">
+              <div class="screen-slice-image"></div>
+            </div>
+          </div>
+        </div>
+      </div>
       <section id="hero" class="text-white">
         <div class="container flex">
           <div class="flow basis-1/2 self-end">
@@ -62,14 +81,7 @@
       <section id="section-2" class="bg-(--primary-color-bg) text-white">
         <div id="section-2-scroll">
           <div id="section-2-pin" class="container content-box">
-            <div id="device" class="mx-auto" aria-hidden="true">
-              <div class="device-screen">
-                <img
-                  src="https://b-cdn.imajiner.id/ssg90-ezgif.com-video-to-gif-converter.gif"
-                  alt=""
-                />
-              </div>
-            </div>
+            <div id="section-2-device-space" aria-hidden="true"></div>
             <div
               id="section-2-copy"
               class="flow text-measure text-center mt-20"
@@ -96,7 +108,7 @@
               dan efektif.
             </p>
           </div>
-          <div id="card-wrapper" class="flex gap-8 mt-40">
+          <div id="journey-card-wrapper" class="flex gap-8 mt-20" inert>
             <div class="card journey-card">
               <h3>Buat baru</h3>
               <p>
@@ -125,6 +137,7 @@
         </div>
       </section>
     </main>
+    <script src="./resources/js/debug.js"></script>
     <script src="./resources/js/animation.js"></script>
     <footer></footer>
   </body>
