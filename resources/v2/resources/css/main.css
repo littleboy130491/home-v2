@@ -1,0 +1,6 @@
+#hero {
+  background-image: url(../images/man-flipped.jpg);
+  background-repeat: no-repeat;
+  background-position: right;
+  background-size: cover;
+}
