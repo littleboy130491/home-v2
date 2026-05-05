@@ -17,6 +17,7 @@
     />
     <link rel="stylesheet" href="./resources/css/dev.css" />
     <link rel="stylesheet" href="./resources/css/tailwind.css" />
+    <link rel="stylesheet" href="./resources/css/animation.css" />
   </head>
   <body>
     <header class="bg-(--primary-color-bg) text-white py-4">
@@ -46,10 +47,7 @@
       >
         <img class="w-[300px]" src="./resources/sphere-cropped.png" />
       </div>
-      <section
-        id="hero"
-        class="bg-[url(./resources/man-flipped.jpg)] bg-right text-white"
-      >
+      <section id="hero" class="text-white">
         <div class="container flex">
           <div class="flow basis-1/2 self-end">
             <h1>Where website meets creativity</h1>
@@ -61,8 +59,18 @@
           </div>
         </div>
       </section>
-      <section id="section-2">
-        <div class="container content-box flow text-measure text-center">
+      <section id="section-2" class="bg-(--primary-color-bg) text-white">
+        <div
+          class="container content-box flow text-measure text-center h-[200vh] flex flex-col justify-center"
+        >
+          <div id="device" class="mx-auto mb-40" aria-hidden="true">
+            <div class="device-screen">
+              <img
+                src="https://b-cdn.imajiner.id/ssg90-ezgif.com-video-to-gif-converter.gif"
+                alt=""
+              />
+            </div>
+          </div>
           <h2>
             <strong>X%</strong> users start their journey by searching the
             internet.
@@ -71,13 +79,9 @@
             So your website often becomes their first impression. The question
             is, has it helped you or not?
           </p>
-          <div
-            id="device"
-            class="w-4xl mx-auto bg-(--device-color-bg) min-h-[400px] mt-40"
-          ></div>
         </div>
       </section>
-      <section id="journey">
+      <section id="journey" class="bg-(--primary-color-bg) text-white">
         <div class="container content-box">
           <div class="flow text-measure text-center">
             <h2>Apa yang Anda butuhkan?</h2>
@@ -116,6 +120,7 @@
         </div>
       </section>
     </main>
+    <script src="./resources/js/animation.js"></script>
     <footer></footer>
   </body>
 </html>
