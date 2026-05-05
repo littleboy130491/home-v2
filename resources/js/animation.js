@@ -1,5 +1,12 @@
 const sphere = document.querySelector("#hero-sphere");
 const hero = document.querySelector("#hero");
+const root = document.documentElement;
+const section2 = document.querySelector("#section-2");
+const section2Scroll = document.querySelector("#section-2-scroll");
+const section2Copy = document.querySelector("#section-2-copy");
+const journey = document.querySelector("#journey");
+const cardWrapper = document.querySelector("#card-wrapper");
+const journeyCards = [...document.querySelectorAll(".journey-card")];
 const device = document.querySelector("#device");
 const screen = document.querySelector(".device-screen");
 let deviceIsOn = false;
@@ -7,6 +14,7 @@ let ticking = false;
 
 const clamp = (value, min = 0, max = 1) => Math.min(Math.max(value, min), max);
 const lerp = (start, end, progress) => start + (end - start) * progress;
+const ease = (progress) => progress * progress * (3 - 2 * progress);
 const prefersReducedMotion = window.matchMedia(
   "(prefers-reduced-motion: reduce)",
 );
@@ -139,21 +147,89 @@ function updateHeroBackgroundFade() {
   hero.style.setProperty("--hero-bg-opacity", opacity);
 }
 
-function sphereHasReachedScreenCenter(sphereRect, screenRect) {
-  const sphereCenterX = sphereRect.left + sphereRect.width / 2;
-  const sphereCenterY = sphereRect.top + sphereRect.height / 2;
-  const screenCenterX = screenRect.left + screenRect.width / 2;
-  const screenCenterY = screenRect.top + screenRect.height / 2;
-  const distanceFromCenter = Math.hypot(
-    sphereCenterX - screenCenterX,
-    sphereCenterY - screenCenterY,
-  );
-  const arrivalTolerance = Math.max(
-    8,
-    Math.min(screenRect.width, screenRect.height) * 0.05,
-  );
+function setRootProperty(name, value) {
+  root.style.setProperty(name, value);
+}
 
-  return distanceFromCenter <= arrivalTolerance;
+function getSectionScrollProgress(section) {
+  if (!section) {
+    return 0;
+  }
+
+  const rect = section.getBoundingClientRect();
+  const scrollableDistance = Math.max(1, section.offsetHeight - window.innerHeight);
+
+  return clamp(-rect.top / scrollableDistance);
+}
+
+function getJourneyEntryProgress() {
+  if (!journey) {
+    return 0;
+  }
+
+  const rect = journey.getBoundingClientRect();
+
+  return clamp((window.innerHeight - rect.top) / (window.innerHeight * 1.15));
+}
+
+function getCardGap() {
+  if (!cardWrapper) {
+    return 0;
+  }
+
+  const styles = window.getComputedStyle(cardWrapper);
+
+  return Number.parseFloat(styles.columnGap || styles.gap) || 0;
+}
+
+function updateSection2ToJourneyTransition() {
+  if (!section2 || !journey) {
+    return;
+  }
+
+  const screenIsOn = deviceIsOn || device?.classList.contains("is-on");
+
+  if (prefersReducedMotion.matches) {
+    setRootProperty("--section-2-copy-opacity", "1");
+    setRootProperty("--section-2-copy-y", "0px");
+    setRootProperty("--device-transition-scale", "1");
+    setRootProperty("--device-transition-y", "0px");
+    setRootProperty("--journey-copy-opacity", screenIsOn ? "1" : "0");
+    setRootProperty("--journey-copy-y", "0px");
+    setRootProperty("--journey-cards-opacity", "1");
+    setRootProperty("--journey-card-scale", "1");
+    setRootProperty("--journey-card-y", "0px");
+    setRootProperty("--journey-card-shift", "0px");
+    return;
+  }
+
+  const sectionProgress = getSectionScrollProgress(section2Scroll);
+  const transitionProgress = ease(clamp((sectionProgress - 0.54) / 0.46));
+  const copyFadeProgress = ease(clamp((transitionProgress - 0.05) / 0.52));
+  const journeyProgress = getJourneyEntryProgress();
+  const cardsSpreadProgress = ease(clamp(journeyProgress / 0.82));
+  const journeyCopyProgress = screenIsOn
+    ? ease(clamp((journeyProgress - 0.34) / 0.46))
+    : 0;
+  const cardWidth = journeyCards[0]?.getBoundingClientRect().width || 0;
+  const cardShift = (cardWidth + getCardGap()) * (1 - cardsSpreadProgress);
+
+  setRootProperty("--section-2-copy-opacity", 1 - copyFadeProgress);
+  setRootProperty("--section-2-copy-y", `${lerp(0, -44, copyFadeProgress)}px`);
+  setRootProperty("--device-transition-scale", "1");
+  setRootProperty("--device-transition-y", "0px");
+  setRootProperty("--journey-copy-opacity", journeyCopyProgress);
+  setRootProperty(
+    "--journey-copy-y",
+    `${lerp(48, 0, journeyCopyProgress)}px`,
+  );
+  setRootProperty("--journey-cards-opacity", "1");
+  setRootProperty(
+    "--journey-card-scale",
+    lerp(0.74, 1, cardsSpreadProgress),
+  );
+  setRootProperty("--journey-card-y", `${lerp(44, 0, cardsSpreadProgress)}px`);
+  setRootProperty("--journey-card-shift", `${cardShift}px`);
 }
 
 function setDevicePower(isOn) {
@@ -162,6 +238,7 @@ function setDevicePower(isOn) {
   }
 
   device.classList.toggle("is-on", isOn);
+  section2Copy?.classList.toggle("is-visible", isOn);
   deviceIsOn = isOn;
 }
 
@@ -171,15 +248,12 @@ function updateAnimation() {
   updateSphereAnimation();
 
   if (!sphere || !device || !screen) {
+    updateSection2ToJourneyTransition();
     return;
   }
 
-  const sphereRect = sphere.getBoundingClientRect();
-  const screenRect = screen.getBoundingClientRect();
-  const sphereHasArrived =
-    getSphereProgress() >= 1 ||
-    sphereHasReachedScreenCenter(sphereRect, screenRect);
-  setDevicePower(sphereHasArrived);
+  setDevicePower(getSphereProgress() >= 1);
+  updateSection2ToJourneyTransition();
 }
 
 function requestAnimationUpdate() {
