@@ -1,6 +1,8 @@
 const DEBUG = true;
 
 const debugRows = {};
+let debugPanel;
+let viewportValue;
 const DEBUG_PHASES = [
   { key: "scrollY", label: "scroll Y" },
   { key: "sphere", label: "sphere", range: "0–1.5*innerH" },
@@ -22,9 +24,9 @@ const DEBUG_PHASES = [
 function createDebugPanel() {
   if (!DEBUG) return;
 
-  const panel = document.createElement("div");
-  panel.id = "debug-panel";
-  panel.style.cssText = `
+  debugPanel = document.createElement("div");
+  debugPanel.id = "debug-panel";
+  debugPanel.style.cssText = `
     position: fixed;
     bottom: 1rem;
     right: 1rem;
@@ -51,17 +53,33 @@ function createDebugPanel() {
     "display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;font-size:10px;opacity:0.85;cursor:pointer;";
   header.innerHTML =
     '<span>animation debug</span><span class="dbg-toggle" style="opacity:0.6;font-weight:400;text-transform:none;">hide</span>';
-  panel.appendChild(header);
+  debugPanel.appendChild(header);
 
   const body = document.createElement("div");
   body.className = "dbg-body";
-  panel.appendChild(body);
+  debugPanel.appendChild(body);
 
   header.addEventListener("click", () => {
     const hidden = body.style.display === "none";
     body.style.display = hidden ? "" : "none";
     header.querySelector(".dbg-toggle").textContent = hidden ? "hide" : "show";
   });
+
+  const viewportRow = document.createElement("div");
+  viewportRow.style.cssText =
+    "display:grid;grid-template-columns:100px 1fr;gap:6px;align-items:center;margin:3px 0 8px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.1);";
+
+  const viewportLabel = document.createElement("span");
+  viewportLabel.style.cssText = "opacity:0.85;";
+  viewportLabel.textContent = "device viewport";
+
+  viewportValue = document.createElement("span");
+  viewportValue.style.cssText =
+    "text-align:right;font-variant-numeric:tabular-nums;opacity:0.95;";
+
+  viewportRow.appendChild(viewportLabel);
+  viewportRow.appendChild(viewportValue);
+  body.appendChild(viewportRow);
 
   DEBUG_PHASES.forEach(({ key, label, range }) => {
     const row = document.createElement("div");
@@ -95,7 +113,28 @@ function createDebugPanel() {
     debugRows[key] = { value: valueEl, fill, row };
   });
 
-  document.body.appendChild(panel);
+  document.body.appendChild(debugPanel);
+  updateViewportDebug();
+}
+
+function updateViewportDebug() {
+  if (!DEBUG || !viewportValue) return;
+  viewportValue.textContent = `${Math.round(window.innerWidth)} x ${Math.round(
+    window.innerHeight,
+  )} px`;
+}
+
+function updateStickyDebugRows(activeKeys = []) {
+  if (!DEBUG) return;
+
+  const activeKeySet = new Set(activeKeys);
+
+  Object.entries(debugRows).forEach(([key, { row }]) => {
+    const stickyActive = activeKeySet.has(key);
+    row.style.outline = stickyActive ? "1px solid #ff2d2d" : "";
+    row.style.outlineOffset = stickyActive ? "2px" : "";
+    row.style.borderRadius = stickyActive ? "4px" : "";
+  });
 }
 
 function updateDebug(key, value, { showRaw = false, max = 1 } = {}) {
@@ -121,3 +160,5 @@ function updateDebug(key, value, { showRaw = false, max = 1 } = {}) {
 }
 
 createDebugPanel();
+window.addEventListener("resize", updateViewportDebug);
+window.updateStickyDebugRows = updateStickyDebugRows;

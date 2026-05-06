@@ -159,3 +159,9 @@
   position: sticky;
   top: 0;
 } */
+
+#device {
+  z-index: 20;
+  left: 0;
+  top: 0;
+}

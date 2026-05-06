@@ -3,36 +3,52 @@
 
   const rows = new Map();
   const rectState = new Map();
+  let debugPanel;
   let panelBody;
+  let viewportValue;
+  let activeStickyKeys = new Set();
   let ticking = false;
+  let rectTargets = [];
 
   const clamp = (value, min = 0, max = 1) => Math.min(Math.max(value, min), max);
   const px = (value) => `${Math.round(value)}px`;
 
-  function getRectProgress(rect) {
+  function getRectProgress(rect, measure) {
+    if (measure === "rect") {
+      const viewportHeight = Math.max(window.innerHeight, 1);
+      const progress = clamp((viewportHeight - rect.top) / viewportHeight);
+
+      return {
+        progress,
+        visible: isRectVisible(rect),
+        pointVisible: rect.top >= 0 && rect.top <= viewportHeight,
+      };
+    }
+
     const viewportHeight = Math.max(window.innerHeight, 1);
     const viewportWidth = Math.max(window.innerWidth, 1);
-    const center = getRectCenter(rect);
-    const progress = clamp(center.y / viewportHeight);
-    const visible =
-      rect.bottom > 0 &&
-      rect.top < viewportHeight &&
-      rect.right > 0 &&
-      rect.left < viewportWidth;
-    const centered =
-      center.x >= 0 &&
-      center.x <= viewportWidth &&
-      center.y >= 0 &&
-      center.y <= viewportHeight;
+    const point = getRectCenter(rect);
+    const progress = clamp(point.y / viewportHeight);
+    const pointVisible =
+      point.x >= 0 &&
+      point.x <= viewportWidth &&
+      point.y >= 0 &&
+      point.y <= viewportHeight;
 
-    return { center, progress, visible, centered };
+    return { point, progress, visible: isRectVisible(rect), pointVisible };
   }
 
   function getRectCenter(rect) {
-    return {
-      x: rect.left + rect.width / 2,
-      y: rect.top + rect.height / 2,
-    };
+    return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+  }
+
+  function isRectVisible(rect) {
+    return (
+      rect.bottom > 0 &&
+      rect.top < window.innerHeight &&
+      rect.right > 0 &&
+      rect.left < window.innerWidth
+    );
   }
 
   function setStyles(element, styles) {
@@ -44,10 +60,10 @@
       return;
     }
 
-    const panel = document.createElement("aside");
-    panel.id = "rect-debug-panel";
-    panel.setAttribute("aria-label", "Bounding rectangle debug panel");
-    setStyles(panel, {
+    debugPanel = document.createElement("aside");
+    debugPanel.id = "rect-debug-panel";
+    debugPanel.setAttribute("aria-label", "Bounding rectangle debug panel");
+    setStyles(debugPanel, {
       position: "fixed",
       right: "16px",
       bottom: "16px",
@@ -108,20 +124,98 @@
       padding: "10px 12px 12px",
     });
 
+    const viewportRow = document.createElement("div");
+    setStyles(viewportRow, {
+      display: "grid",
+      gridTemplateColumns: "minmax(0, 1fr) auto",
+      gap: "8px",
+      alignItems: "center",
+      padding: "7px",
+      border: "1px solid rgba(255, 255, 255, 0.08)",
+      borderRadius: "6px",
+      background: "rgba(255, 255, 255, 0.035)",
+      fontVariantNumeric: "tabular-nums",
+    });
+
+    const viewportLabel = document.createElement("span");
+    viewportLabel.textContent = "device viewport";
+    viewportLabel.style.color = "rgba(255, 255, 255, 0.86)";
+
+    viewportValue = document.createElement("span");
+    viewportValue.style.color = "#ffffff";
+    viewportValue.style.fontWeight = "700";
+
+    viewportRow.append(viewportLabel, viewportValue);
+    panelBody.appendChild(viewportRow);
+
     header.addEventListener("click", () => {
       const hidden = panelBody.hidden;
       panelBody.hidden = !hidden;
       toggle.textContent = hidden ? "hide" : "show";
     });
 
-    panel.append(header, panelBody);
-    document.body.appendChild(panel);
+    debugPanel.append(header, panelBody);
+    document.body.appendChild(debugPanel);
+    updateViewportRow();
 
   }
 
-  function createRow(key, label) {
-    if (!panelBody || rows.has(key)) {
+  function updateViewportRow() {
+    if (!viewportValue) {
       return;
+    }
+
+    viewportValue.textContent = `${Math.round(window.innerWidth)} x ${Math.round(
+      window.innerHeight,
+    )} px`;
+  }
+
+  function updateStickyDebugRows(activeKeys = []) {
+    if (!DEBUG) {
+      return;
+    }
+
+    activeStickyKeys = new Set(activeKeys);
+
+    rows.forEach((row, key) => {
+      if (!row) {
+        return;
+      }
+
+      updateStickyDebugRow(key, row);
+    });
+  }
+
+  function onStickyStart({ key }) {
+    activeStickyKeys.add(key);
+    updateStickyDebugRows(activeStickyKeys);
+  }
+
+  function onStickyEnd({ key }) {
+    activeStickyKeys.delete(key);
+    updateStickyDebugRows(activeStickyKeys);
+  }
+
+  function updateStickyDebugRow(key, row) {
+    const stickyActive = activeStickyKeys.has(key);
+    row.row.style.borderColor = stickyActive
+      ? "#ff2d2d"
+      : "rgba(255, 255, 255, 0.08)";
+  }
+
+  function createRow(key, label, measure) {
+    if (!panelBody) {
+      return;
+    }
+
+    const existing = rows.get(key);
+    if (existing?.measure === measure) {
+      return;
+    }
+
+    if (existing) {
+      existing.row.remove();
+      rows.delete(key);
     }
 
     const row = document.createElement("div");
@@ -185,30 +279,35 @@
       fontVariantNumeric: "tabular-nums",
     });
 
-    const metricEls = {
-      centerX: createMetric("cx"),
-      centerY: createMetric("cy"),
-      width: createMetric("width"),
-      visible: createMetric("visible"),
-    };
+    const metricEls =
+      measure === "rect"
+        ? {
+            top: createMetric("top"),
+            bottom: createMetric("bottom"),
+            height: createMetric("height"),
+            visible: createMetric("visible"),
+          }
+        : {
+            centerX: createMetric("cx"),
+            centerY: createMetric("cy"),
+            width: createMetric("width"),
+            visible: createMetric("visible"),
+          };
 
-    metrics.append(
-      metricEls.centerX,
-      metricEls.centerY,
-      metricEls.width,
-      metricEls.visible,
-    );
+    metrics.append(...Object.values(metricEls));
     topLine.append(labelEl, valueEl);
     row.append(topLine, bar, metrics);
     panelBody.appendChild(row);
 
     rows.set(key, {
       row,
+      measure,
       label: labelEl,
       value: valueEl,
       fill,
       metrics: metricEls,
     });
+    updateStickyDebugRow(key, rows.get(key));
   }
 
   function createMetric(label) {
@@ -218,30 +317,42 @@
     return wrapper;
   }
 
-  function updateRow(key, label, rect) {
-    createRow(key, label);
+  function updateRow(key, label, rect, measure) {
+    createRow(key, label, measure);
 
     const row = rows.get(key);
     if (!row) {
       return;
     }
 
-    const { center, progress, visible, centered } = getRectProgress(rect);
+    const { point, progress, visible, pointVisible } = getRectProgress(
+      rect,
+      measure,
+    );
     row.value.textContent = progress.toFixed(2);
     row.fill.style.width = `${progress * 100}%`;
-    row.fill.style.background = centered
+    row.fill.style.background = pointVisible
       ? "linear-gradient(90deg, #55d7ff, #77f2a1)"
       : "linear-gradient(90deg, #667085, #98a2b3)";
     row.row.style.opacity = visible ? "1" : "0.72";
-    row.metrics.centerX.textContent = `cx: ${px(center.x)}`;
-    row.metrics.centerY.textContent = `cy: ${px(center.y)}`;
-    row.metrics.width.textContent = `width: ${px(rect.width)}`;
+
+    if (measure === "rect") {
+      row.metrics.top.textContent = `top: ${px(rect.top)}`;
+      row.metrics.bottom.textContent = `bottom: ${px(rect.bottom)}`;
+      row.metrics.height.textContent = `height: ${px(rect.height)}`;
+    } else {
+      row.metrics.centerX.textContent = `cx: ${px(point.x)}`;
+      row.metrics.centerY.textContent = `cy: ${px(point.y)}`;
+      row.metrics.width.textContent = `width: ${px(rect.width)}`;
+    }
+
     row.metrics.visible.textContent = visible ? "visible: yes" : "visible: no";
   }
 
-  function rememberRect(key, label, rect) {
+  function rememberRect(key, label, rect, measure = "center") {
     rectState.set(key, {
       label,
+      measure,
       rect: {
         top: rect.top,
         right: rect.right,
@@ -249,14 +360,58 @@
         left: rect.left,
         width: rect.width,
         height: rect.height,
-        centerX: rect.left + rect.width / 2,
-        centerY: rect.top + rect.height / 2,
       },
     });
   }
 
+  function collectRectTargets() {
+    rectTargets = [
+      {
+        key: "sphere",
+        element: document.getElementById("sphere"),
+        measure: "center",
+      },
+      {
+        key: "stats",
+        element: document.getElementById("stats"),
+        measure: "rect",
+      },
+      {
+        key: "device",
+        element: document.getElementById("device"),
+        measure: "center",
+      },
+      {
+        key: "screenSplit",
+        element: document.getElementById("screen-split"),
+        measure: "center",
+      },
+    ];
+  }
+
+  function updateDebugRects() {
+    rectTargets.forEach(({ key, element, measure }) => {
+      if (!element) {
+        return;
+      }
+
+      const label = element.id
+        ? `#${element.id}`
+        : element.className
+          ? `.${element.className}`
+          : key;
+
+      rememberRect(key, label, element.getBoundingClientRect(), measure);
+    });
+
+    requestMeasure();
+  }
+
   function measureTargets() {
-    rectState.forEach(({ label, rect }, key) => updateRow(key, label, rect));
+    updateViewportRow();
+    rectState.forEach(({ label, rect, measure }, key) =>
+      updateRow(key, label, rect, measure),
+    );
   }
 
   function requestMeasure() {
@@ -271,25 +426,21 @@
     });
   }
 
-  window.debugBoundingRect = function debugBoundingRect(key, rect, element) {
-    if (!DEBUG || !rect) {
-      return;
-    }
-
-    const label = element?.id
-      ? `#${element.id}`
-      : element?.className
-        ? `.${element.className}`
-        : key;
-    rememberRect(key, label, rect);
-    requestMeasure();
-  };
+  window.onStickyStart = onStickyStart;
+  window.onStickyEnd = onStickyEnd;
 
   function init() {
     createPanel();
-    requestMeasure();
+    collectRectTargets();
+    updateDebugRects();
     window.dispatchEvent(new Event("debug:ready"));
   }
+
+  window.addEventListener("scroll", updateDebugRects, { passive: true });
+  window.addEventListener("resize", () => {
+    collectRectTargets();
+    updateDebugRects();
+  });
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", init, { once: true });

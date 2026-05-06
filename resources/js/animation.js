@@ -11,6 +11,7 @@ const device = document.querySelector("#device");
 const screen = document.querySelector(".device-screen");
 let deviceIsOn = false;
 let ticking = false;
+let stickyTargets = [];
 
 const debug = typeof updateDebug === "function" ? updateDebug : () => {};
 
@@ -154,6 +155,38 @@ function updateHeroBackgroundFade() {
 
 function setRootProperty(name, value) {
   root.style.setProperty(name, value);
+}
+
+function getStickyTop(element) {
+  const top = Number.parseFloat(getComputedStyle(element).top);
+  return Number.isFinite(top) ? top : 0;
+}
+
+function isStickyActive(element) {
+  const top = getStickyTop(element);
+  const currentTop = element.getBoundingClientRect().top;
+  return Math.abs(currentTop - top) <= 1;
+}
+
+function getStickyDebugKey(element) {
+  const section = element.closest("section[id]");
+  const id = section?.id || element.id;
+  return id ? id.replace(/[^a-zA-Z0-9]/g, "") : "";
+}
+
+function collectStickyTargets() {
+  stickyTargets = Array.from(document.body.querySelectorAll("*")).filter(
+    (element) => getComputedStyle(element).position === "sticky",
+  );
+}
+
+function updateStickyDebug() {
+  const activeKeys = stickyTargets
+    .filter(isStickyActive)
+    .map(getStickyDebugKey)
+    .filter(Boolean);
+
+  window.updateStickyDebugRows?.(activeKeys);
 }
 
 function getSectionScrollProgress(section) {
@@ -333,6 +366,7 @@ function updateAnimation() {
   });
   updateHeroBackgroundFade();
   updateSphereAnimation();
+  updateStickyDebug();
 
   if (!sphere || !device || !screen) {
     updateSection2ToJourneyTransition();
@@ -350,7 +384,11 @@ function requestAnimationUpdate() {
   }
 }
 
+collectStickyTargets();
 requestAnimationUpdate();
 window.addEventListener("scroll", requestAnimationUpdate, { passive: true });
-window.addEventListener("resize", requestAnimationUpdate);
+window.addEventListener("resize", () => {
+  collectStickyTargets();
+  requestAnimationUpdate();
+});
 prefersReducedMotion.addEventListener("change", requestAnimationUpdate);

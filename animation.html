@@ -722,6 +722,7 @@
 
   <div class="debug-panel">
     <strong>Scroll Animation State</strong>
+    <div class="debug-row"><span>Device viewport</span><span id="debugViewport">0 x 0 px</span></div>
     <div class="debug-row"><span>Progress</span><span id="debugProgress">0%</span></div>
     <div class="debug-row"><span>Active phase</span><span id="debugPhase">Hero</span></div>
     <div class="debug-row"><span>Sphere</span><span id="debugSphere">Fixed / visible</span></div>
@@ -747,6 +748,7 @@
   <script>
     const root = document.documentElement;
     const stage = document.getElementById('stage');
+    const debugViewport = document.getElementById('debugViewport');
     const debugProgress = document.getElementById('debugProgress');
     const debugPhase = document.getElementById('debugPhase');
     const debugSphere = document.getElementById('debugSphere');
@@ -864,6 +866,7 @@
       if (p5 > 0.28) phase = 'Section 3 appears';
 
       debugProgress.textContent = `${Math.round(scrollInside * 100)}%`;
+      debugViewport.textContent = `${Math.round(vw)} x ${Math.round(vh)} px`;
       debugPhase.textContent = phase;
       debugSphere.textContent = p2 < 0.15
         ? 'Fixed / moving by transform'
