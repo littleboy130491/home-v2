@@ -138,14 +138,16 @@ ScrollTrigger.create({
   markers: true,
 
   onEnter: () => sphereReachsDevice(),
-  onLeave: () => alert("LEAVE: #stats section left"),
-  onEnterBack: () => alert("ENTER BACK: #stats section entered again"),
-  onLeaveBack: () => alert("LEAVE BACK: #stats section left upward"),
+  // onLeave: () => alert("LEAVE: #stats section left"),
+  // onEnterBack: () => alert("ENTER BACK: #stats section entered again"),
+  // onLeaveBack: () => alert("LEAVE BACK: #stats section left upward"),
 });
 
 let device = document.querySelector("#device");
+let stickyWrapper = document.querySelector(".sticky-wrapper");
 function sphereReachsDevice() {
-  device.style.position = "fixed";
+  // device.style.position = "fixed";
+  stickyWrapper.style.position = "fixed";
 }
 
 /*

@@ -160,8 +160,9 @@
   top: 0;
 } */
 
-#device {
+.sticky-wrapper {
   z-index: 20;
   left: 0;
   top: 0;
+  width: 100%;
 }
