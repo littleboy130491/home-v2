@@ -18,10 +18,11 @@
     <link rel="stylesheet" href="./resources/css/base.css" />
     <link rel="stylesheet" href="./resources/css/main.css" />
     <link rel="stylesheet" href="./resources/css/animation.css" />
+    <link rel="stylesheet" href="./resources/css/dev.css" />
   </head>
   <body>
     <header class="section-dark">
-      <div class="container flex gap-4 py-8">
+      <div class="container flex gap-4 py-(--space-sm)">
         <div id="site-logo" class="w-[200px]">
           <img src="./resources/images/Logo Imajiner - White.png" />
         </div>
@@ -37,7 +38,9 @@
     </header>
     <main>
       <section id="hero" class="section-dark">
-        <div class="container pb-10 min-h-[80vh] flex flex-col justify-end">
+        <div
+          class="container pb-(--space-sm) min-h-[80vh] flex flex-col justify-end"
+        >
           <div class="flow basis-1/2">
             <h1>Where websites meet creativity</h1>
             <p>
@@ -52,35 +55,38 @@
         </div>
       </section>
       <section id="stats" class="section-dark">
-        <div class="sticky-wrapper pt-60">
-          <div id="device" class="">
-            <img
-              src="https://b-cdn.imajiner.id/ssg90-ezgif.com-video-to-gif-converter.gif"
-              alt=""
-              class="mx-auto h-[380px]"
-            />
+        <div class="container py-(--space-container) min-h-[200vh] relative">
+          <div id="sticky-wrapper" class="absolute mx-auto w-full pt-40">
+            <div id="device" class="">
+              <img
+                src="https://b-cdn.imajiner.id/ssg90-ezgif.com-video-to-gif-converter.gif"
+                alt=""
+                class="mx-auto h-[380px]"
+              />
+            </div>
             <div id="screen-split" class="w-[800px] mx-auto">
               <div class="screen-card"></div>
               <div class="screen-card"></div>
               <div class="screen-card"></div>
             </div>
-          </div>
-        </div>
-        <div class="container min-h-[300vh] py-10">
-          <div id="stats-copy" class="flow text-measure text-center mt-24">
-            <h2>
-              <strong>X%</strong> users start their journey by searching the
-              internet.
-            </h2>
-            <p>
-              So your website often becomes their first impression. The question
-              is, has it helped you or not?
-            </p>
+            <div
+              id="stats-copy"
+              class="flow text-measure text-center mt-(--space-md)"
+            >
+              <h2>
+                <strong>X%</strong> users start their journey by searching the
+                internet.
+              </h2>
+              <p>
+                So your website often becomes their first impression. The
+                question is, has it helped you or not?
+              </p>
+            </div>
           </div>
         </div>
       </section>
-      <section id="journey">
-        <div class="container py-20">
+      <section id="journey" class="section-dark">
+        <div class="container py-(--space-container)">
           <div class="flow text-measure text-center">
             <h2>Apa yang Anda butuhkan?</h2>
             <p>
@@ -89,7 +95,7 @@
               dan efektif.
             </p>
           </div>
-          <div id="journey-cards-wrapper" class="flex gap-8 pt-24">
+          <div id="journey-cards-wrapper" class="flex gap-8 mt-(--space-md)">
             <div class="journey-card flow">
               <h3>Buat website baru</h3>
               <p>
@@ -114,6 +120,101 @@
               </p>
               <a href="#">Learn more</a>
             </div>
+          </div>
+        </div>
+      </section>
+      <section id="social-proof">
+        <div class="container py-(--space-container)">
+          <div id="social-proof-copy" class="flow text-measure text-center">
+            <h2>Dipercaya oleh brand terkemuka di berbagai industri.</h2>
+            <p>
+              Dari startup yang sedang bertumbuh hingga perusahaan mapan, kami
+              telah membantu mereka membangun kehadiran digital yang
+              berkesan—dan mengubah pengunjung pertama menjadi pelanggan jangka
+              panjang.
+            </p>
+          </div>
+          <div
+            id="logo-wrapper"
+            class="flex justify-between gap-8 mt-(--space-md)"
+          >
+            <div class="logo"></div>
+            <div class="logo"></div>
+            <div class="logo"></div>
+            <div class="logo"></div>
+          </div>
+          <div
+            id="testimonial-cards-wrapper"
+            class="flex justify-between gap-8 mt-(--space-md)"
+          >
+            <div class="testimonial-card"></div>
+            <div class="testimonial-card"></div>
+            <div class="testimonial-card"></div>
+            <div class="testimonial-card"></div>
+          </div>
+        </div>
+      </section>
+      <section id="portfolio">
+        <div class="container py-(--space-container)">
+          <div id="portfolio-copy" class="flow text-center text-measure">
+            <h2>Setiap proyek adalah cerita. Lihat hasil kerja kami.</h2>
+            <p>
+              Kami tidak mengejar volume atau eksposur—setiap website kami
+              rancang sebagai studi kasus tersendiri, dengan detail yang
+              dipikirkan dan hasil yang bisa diukur.
+            </p>
+            <a href="#" class="btn">View Portfolio</a>
+          </div>
+          <div
+            id="portfolio-cards-wrapper"
+            class="flex justify-between gap-8 mt-(--space-md)"
+          >
+            <div class="portfolio-card"></div>
+            <div class="portfolio-card"></div>
+            <div class="portfolio-card"></div>
+            <div class="portfolio-card"></div>
+            <div class="portfolio-card"></div>
+          </div>
+        </div>
+      </section>
+      <section id="our-values">
+        <div class="container py-(--space-container)">
+          <div id="our-values-copy" class="flow text-center text-measure">
+            <h2>Apa yang membuat kami berbeda.</h2>
+            <p>
+              Empat hal yang menjadi pegangan setiap kali kami merancang dan
+              merawat website klien — bukan janji, tapi cara kerja.
+            </p>
+          </div>
+          <div id="our-values-grids" class="grid">
+            <div class="our-value-grid-1"></div>
+            <div class="our-value-grid-2"></div>
+            <div class="our-value-grid-3"></div>
+            <div class="our-value-grid-4"></div>
+            <div class="our-value-grid-5"></div>
+          </div>
+        </div>
+      </section>
+      <section id="home-cta">
+        <div class="container py-(--space-container)">
+          <div id="wow-factor-wrapper" class="flow text-center text-measure">
+            <div id="wow-factor"></div>
+            <div id="wow-factor-copy">
+              <h2>
+                Rata-rata pengunjung akan meninggalkan website Anda dalam
+                <span class="highlight">3 detik</span>
+              </h2>
+              <p>Kecuali website Anda <span class="highlight">menarik</span></p>
+            </div>
+          </div>
+          <div id="cta" class="flow text-center text-measure pt-(--space-md)">
+            <p>
+              Anda masih di sini?
+              <span class="highlight">Hatur nuhun.</span>Sepertinya Anda
+              tertarik untuk berbicara lebih lanjut. Obrolan santai, sekedar
+              diskusi awal—siapa tahu cocok dan bisa bekerja sama.
+            </p>
+            <a href="#" class="btn">Mulai Obrolan</a>
           </div>
         </div>
       </section>

@@ -160,9 +160,8 @@
   top: 0;
 } */
 
-.sticky-wrapper {
+#sticky-wrapper {
   z-index: 20;
-  left: 0;
   top: 0;
-  width: 100%;
+  left: 0;
 }

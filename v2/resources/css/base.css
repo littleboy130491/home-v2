@@ -4,6 +4,9 @@
   --heading-font-family: "Plus Jakarta Sans", sans-serif;
   --heading-weight: 400;
   --heading-color: #f7fbfb;
+  --space-sm: 2rem; /* for header */
+  --space-md: 3rem; /* for inside container spacing */
+  --space-container: 10rem; /* for container */
 }
 
 section {
@@ -69,4 +72,9 @@ h3 {
 .text-measure > p {
   max-width: 56ch;
   margin-inline: auto;
+}
+
+span.highlight {
+  color: burlywood;
+  font-style: italic;
 }

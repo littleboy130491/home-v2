@@ -1,0 +1,17 @@
+.logo {
+  border: 1px dotted black;
+  min-height: 200px;
+  min-width: 200px;
+}
+
+.testimonial-card {
+  border: 1px dotted black;
+  min-height: 400px;
+  min-width: 200px;
+}
+
+.portfolio-card {
+  border: 1px dotted black;
+  min-height: 400px;
+  min-width: 200px;
+}

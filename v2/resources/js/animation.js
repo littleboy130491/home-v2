@@ -144,10 +144,10 @@ ScrollTrigger.create({
 });
 
 let device = document.querySelector("#device");
-let stickyWrapper = document.querySelector(".sticky-wrapper");
+let stickyWrapper = document.querySelector("#sticky-wrapper");
 function sphereReachsDevice() {
   // device.style.position = "fixed";
-  stickyWrapper.style.position = "fixed";
+  // stickyWrapper.style.position = "fixed";
 }
 
 /*
