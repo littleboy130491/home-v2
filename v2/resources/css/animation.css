@@ -141,6 +141,154 @@
   }
 }
 
+/* ---------- pinned scene (stats -> journey) ---------- */
+
+#scene {
+  height: 400vh;
+
+  /*
+    Sizes from split-example.html: the card trio is min(900px, 92vw)
+    at 16:9, and each journey card is exactly one third of it — so is
+    the device screen, which lets the split be the reference's pure
+    horizontal slide with zero deformation.
+  */
+  --screen-w: min(900px, 92vw);
+  --split-card-w: calc(var(--screen-w) / 3);
+  --split-card-h: calc(var(--screen-w) * 9 / 16);
+}
+
+#scene-pin {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.scene-layer {
+  position: absolute;
+  inset: 0;
+}
+
+/* journey overlays stats; only clickable once the cards are revealed */
+#journey {
+  pointer-events: none;
+}
+
+#journey.is-interactive {
+  pointer-events: auto;
+}
+
+/* ---------- desktop device ---------- */
+
+#device {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#device-screen {
+  position: relative;
+  /* content-box: the visible screen is exactly 3 cards wide / 1 card
+     tall, with the bezel border outside that */
+  box-sizing: content-box;
+  width: var(--screen-w);
+  height: var(--split-card-h);
+  border: 10px solid #1b2331;
+  border-radius: 14px;
+  background: #04060c;
+  overflow: hidden;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.55);
+  transition: box-shadow 0.8s ease;
+}
+
+/* fill (not cover) so the gif stretches exactly like the card slices */
+#screen-media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+}
+
+/* opacity scrubbed by GSAP — the screen wakes gradually as the
+   sphere enters, like --desktop-awake in animation.html */
+#screen-off {
+  position: absolute;
+  inset: 0;
+  background: #04060c;
+  opacity: 1;
+}
+
+#device.is-on #device-screen {
+  box-shadow:
+    0 0 60px rgba(44, 192, 223, 0.35),
+    0 24px 80px rgba(0, 0, 0, 0.55);
+}
+
+#device-stand {
+  width: 64px;
+  height: 52px;
+  background: linear-gradient(#1b2331, #0d1320);
+}
+
+#device-base {
+  width: 220px;
+  height: 12px;
+  border-radius: 999px;
+  background: #1b2331;
+}
+
+/* ---------- journey cards / screen split ---------- */
+
+#journey-cards-wrapper {
+  justify-content: center;
+  /* SPLIT_DISTANCE from split-example.html: how far the outer cards
+     travel when fully separated */
+  gap: 36px;
+}
+
+.journey-card {
+  position: relative;
+  flex: none;
+  width: var(--split-card-w);
+  height: var(--split-card-h);
+  padding: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 12px;
+  background: #0a111f;
+  overflow: hidden;
+  will-change: transform;
+}
+
+/*
+  THE TRICK (from split-example.html): each card face is a background
+  3 cards wide, shifted per card, so card 1 shows the left third of
+  the screen, card 2 the middle, card 3 the right. Cards are exactly
+  the size of a screen third, so nothing ever deforms.
+*/
+.journey-card-screen {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: url("https://b-cdn.imajiner.id/ssg90-ezgif.com-video-to-gif-converter.gif");
+  background-size: 300% 100%;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+
+.journey-card:nth-child(1) .journey-card-screen {
+  background-position: 0% 50%;
+}
+
+.journey-card:nth-child(2) .journey-card-screen {
+  background-position: 50% 50%;
+}
+
+.journey-card:nth-child(3) .journey-card-screen {
+  background-position: 100% 50%;
+}
+
+/* ---------- reduced motion: static layout, everything visible ---------- */
+
 @media (prefers-reduced-motion: reduce) {
   #sphere,
   #sphere::before,
@@ -148,20 +296,37 @@
   #sphere img {
     animation: none;
   }
-}
 
-#screen-split > div {
-  background-color: aquamarine;
-}
+  #sphere {
+    display: none;
+  }
 
-/* #stats-copy {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0;
-} */
+  #scene {
+    height: auto;
+  }
 
-#sticky-wrapper {
-  z-index: 20;
-  top: 0;
-  left: 0;
+  #scene-pin {
+    height: auto;
+    overflow: visible;
+  }
+
+  .scene-layer {
+    position: static;
+  }
+
+  .scene-layer .container {
+    padding-block: var(--space-container);
+  }
+
+  #journey {
+    pointer-events: auto;
+  }
+
+  #screen-off {
+    opacity: 0;
+  }
+
+  .journey-card-screen {
+    display: none;
+  }
 }

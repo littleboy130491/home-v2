@@ -1,5 +1,5 @@
-- section 1: there is an object, sphere energy like, glowing and rotating. it should capture audience interest.
-- transition to section 2: the object should be follow the scroll and move into section 2.
+- section 1: there is an object, sphere energy like, glowing and rotating. it should capture audience interest. the animation reference can be checked on tailwind.html
+- transition to section 2: the object should be follow the scroll and move into section 2. the animation reference can be checked on tailwind.html
 - section 2: the sphere comes into the desktop (turn off condition) and gives it life (the desktop becomes turned on).
 - transition to section 3: the heading and description from the section 2 will fade away, the desktop stay fixed. so it seems like there is no movement when user scroll to the section 3.
-- section 3: the desktop will be split into 3 cards, those cards are the pathway cards. then the heading and description will appear.
+- section 3: the desktop will be split into 3 cards, those cards are the pathway cards. then the heading and description will appear. the split should be as smooth as possible, the animation reference can be checked on split-example.html

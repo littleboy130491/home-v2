@@ -54,75 +54,93 @@
           </div>
         </div>
       </section>
-      <section id="stats" class="section-dark">
-        <div class="container py-(--space-container) min-h-[200vh] relative">
-          <div id="sticky-wrapper" class="absolute mx-auto w-full pt-40">
-            <div id="device" class="">
-              <img
-                src="https://b-cdn.imajiner.id/ssg90-ezgif.com-video-to-gif-converter.gif"
-                alt=""
-                class="mx-auto h-[380px]"
-              />
-            </div>
-            <div id="screen-split" class="w-[800px] mx-auto">
-              <div class="screen-card"></div>
-              <div class="screen-card"></div>
-              <div class="screen-card"></div>
-            </div>
+      <!--
+        #scene provides the scroll distance; #scene-pin is pinned for its
+        whole height while the stats -> journey sequence plays out.
+        #stats and #journey overlap inside the pinned stage.
+      -->
+      <div id="scene" class="section-dark">
+        <div id="scene-pin">
+          <section id="stats" class="scene-layer">
             <div
-              id="stats-copy"
-              class="flow text-measure text-center mt-(--space-md)"
+              class="container h-full flex flex-col items-center justify-center"
             >
-              <h2>
-                <strong>X%</strong> users start their journey by searching the
-                internet.
-              </h2>
-              <p>
-                So your website often becomes their first impression. The
-                question is, has it helped you or not?
-              </p>
+              <div id="stats-copy" class="flow text-measure text-center">
+                <h2>
+                  <strong>X%</strong> users start their journey by searching
+                  the internet.
+                </h2>
+                <p>
+                  So your website often becomes their first impression. The
+                  question is, has it helped you or not?
+                </p>
+              </div>
+              <div id="device" class="mt-(--space-md)">
+                <div id="device-screen">
+                  <img
+                    id="screen-media"
+                    src="https://b-cdn.imajiner.id/ssg90-ezgif.com-video-to-gif-converter.gif"
+                    alt=""
+                  />
+                  <div id="screen-off" aria-hidden="true"></div>
+                </div>
+                <div id="device-stand" aria-hidden="true"></div>
+                <div id="device-base" aria-hidden="true"></div>
+              </div>
             </div>
-          </div>
+          </section>
+          <section id="journey" class="scene-layer">
+            <div class="container h-full flex flex-col justify-center">
+              <div id="journey-copy" class="flow text-measure text-center">
+                <h2>Apa yang Anda butuhkan?</h2>
+                <p>
+                  Kami menyediakan layanan desain, pengembangan, dan
+                  pemeliharaan website untuk membantu Anda membangun kehadiran
+                  online yang kuat dan efektif.
+                </p>
+              </div>
+              <div
+                id="journey-cards-wrapper"
+                class="flex gap-8 mt-(--space-md)"
+              >
+                <div class="journey-card">
+                  <div class="journey-card-content flow">
+                    <h3>Buat website baru</h3>
+                    <p>
+                      Bangun website dari nol dengan konsep kuat, desain khas,
+                      dan arsitektur yang siap bertumbuh bersama bisnis Anda.
+                    </p>
+                    <a href="#">Learn more</a>
+                  </div>
+                  <div class="journey-card-screen" aria-hidden="true"></div>
+                </div>
+                <div class="journey-card">
+                  <div class="journey-card-content flow">
+                    <h3>Buat website baru</h3>
+                    <p>
+                      Bangun website dari nol dengan konsep kuat, desain khas,
+                      dan arsitektur yang siap bertumbuh bersama bisnis Anda.
+                    </p>
+                    <a href="#">Learn more</a>
+                  </div>
+                  <div class="journey-card-screen" aria-hidden="true"></div>
+                </div>
+                <div class="journey-card">
+                  <div class="journey-card-content flow">
+                    <h3>Buat website baru</h3>
+                    <p>
+                      Bangun website dari nol dengan konsep kuat, desain khas,
+                      dan arsitektur yang siap bertumbuh bersama bisnis Anda.
+                    </p>
+                    <a href="#">Learn more</a>
+                  </div>
+                  <div class="journey-card-screen" aria-hidden="true"></div>
+                </div>
+              </div>
+            </div>
+          </section>
         </div>
-      </section>
-      <section id="journey" class="section-dark">
-        <div class="container py-(--space-container)">
-          <div class="flow text-measure text-center">
-            <h2>Apa yang Anda butuhkan?</h2>
-            <p>
-              Kami menyediakan layanan desain, pengembangan, dan pemeliharaan
-              website untuk membantu Anda membangun kehadiran online yang kuat
-              dan efektif.
-            </p>
-          </div>
-          <div id="journey-cards-wrapper" class="flex gap-8 mt-(--space-md)">
-            <div class="journey-card flow">
-              <h3>Buat website baru</h3>
-              <p>
-                Bangun website dari nol dengan konsep kuat, desain khas, dan
-                arsitektur yang siap bertumbuh bersama bisnis Anda.
-              </p>
-              <a href="#">Learn more</a>
-            </div>
-            <div class="journey-card flow">
-              <h3>Buat website baru</h3>
-              <p>
-                Bangun website dari nol dengan konsep kuat, desain khas, dan
-                arsitektur yang siap bertumbuh bersama bisnis Anda.
-              </p>
-              <a href="#">Learn more</a>
-            </div>
-            <div class="journey-card flow">
-              <h3>Buat website baru</h3>
-              <p>
-                Bangun website dari nol dengan konsep kuat, desain khas, dan
-                arsitektur yang siap bertumbuh bersama bisnis Anda.
-              </p>
-              <a href="#">Learn more</a>
-            </div>
-          </div>
-        </div>
-      </section>
+      </div>
       <section id="social-proof">
         <div class="container py-(--space-container)">
           <div id="social-proof-copy" class="flow text-measure text-center">
