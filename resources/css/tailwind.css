@@ -1,10 +1,23 @@
 :root {
   --primary-color-bg: #000612;
+  --background-color-dark: #02070a;
   --heading-font-family: "Plus Jakarta Sans", sans-serif;
   --heading-weight: 500;
   --device-color-bg: black;
   --card-bg: #062433;
   --color-btn: white;
+  --color-accent: #e8c547;
+  --color-cyan: #3ac7df;
+  --color-surface: #07151f;
+  --color-surface-deep: #050d14;
+  --schema-bg: #f7fbfb;
+  --schema-text: #000612;
+  --schema-text-muted: rgba(0, 6, 18, 0.62);
+  --schema-heading: #000612;
+  --schema-btn-bg: #000612;
+  --schema-btn-text: #f7fbfb;
+  --schema-highlight: #b8860b;
+  --schema-border: rgba(0, 6, 18, 0.18);
   --device-width: min(calc(100vw - 2rem), 60rem);
   --device-padding: 0.75rem;
   --section-2-copy-opacity: 1;
@@ -29,6 +42,39 @@
   --journey-card-scale: 0.82;
   --journey-card-shift: 0px;
   --journey-card-y: 0px;
+}
+
+body {
+  margin: 0;
+  background-color: var(--schema-bg);
+  color: var(--schema-text);
+}
+
+.section-dark {
+  --schema-bg: var(--background-color-dark);
+  --schema-text: #f7fbfb;
+  --schema-text-muted: rgba(247, 251, 251, 0.62);
+  --schema-heading: #f7fbfb;
+  --schema-btn-bg: #f7fbfb;
+  --schema-btn-text: var(--primary-color-bg);
+  --schema-highlight: var(--color-accent);
+  --schema-border: rgba(255, 255, 255, 0.18);
+  background-color: var(--schema-bg);
+  color: var(--schema-text);
+}
+
+.section-dark :is(h1, h2, h3, h4, h5, h6) {
+  color: var(--schema-heading);
+}
+
+.section-dark .btn {
+  background-color: var(--schema-btn-bg);
+  color: var(--schema-btn-text);
+}
+
+span.highlight {
+  color: var(--schema-highlight);
+  font-style: italic;
 }
 
 .site-logo {
@@ -378,6 +424,7 @@ p {
   z-index: auto;
   min-height: 230vh;
   overflow: clip;
+  padding-bottom: clamp(8rem, 14vh, 12rem);
   background-color: var(--primary-color-bg);
   color: white;
 }

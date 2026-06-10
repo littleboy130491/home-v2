@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="./resources/css/main.css" />
     <link rel="stylesheet" href="./resources/css/animation.css" />
     <link rel="stylesheet" href="./resources/css/dev.css" />
+    <link rel="stylesheet" href="./resources/css/components.css" />
   </head>
   <body>
     <header class="section-dark">
@@ -54,11 +55,6 @@
           </div>
         </div>
       </section>
-      <!--
-        #scene provides the scroll distance; #scene-pin is pinned for its
-        whole height while the stats -> journey sequence plays out.
-        #stats and #journey overlap inside the pinned stage.
-      -->
       <div id="scene" class="section-dark">
         <div id="scene-pin">
           <section id="stats" class="scene-layer">
@@ -67,8 +63,8 @@
             >
               <div id="stats-copy" class="flow text-measure text-center">
                 <h2>
-                  <strong>X%</strong> users start their journey by searching
-                  the internet.
+                  <strong>X%</strong> users start their journey by searching the
+                  internet.
                 </h2>
                 <p>
                   So your website often becomes their first impression. The
@@ -141,10 +137,12 @@
           </section>
         </div>
       </div>
-      <section id="social-proof">
+      <section id="social-proof" class="section-dark is-schema-animated">
         <div class="container py-(--space-container)">
           <div id="social-proof-copy" class="flow text-measure text-center">
-            <h2>Dipercaya oleh brand terkemuka di berbagai industri.</h2>
+            <h2>
+              Dipercaya oleh brand <em>terkemuka</em><br />di berbagai industri.
+            </h2>
             <p>
               Dari startup yang sedang bertumbuh hingga perusahaan mapan, kami
               telah membantu mereka membangun kehadiran digital yang
@@ -156,26 +154,57 @@
             id="logo-wrapper"
             class="flex justify-between gap-8 mt-(--space-md)"
           >
-            <div class="logo"></div>
-            <div class="logo"></div>
-            <div class="logo"></div>
-            <div class="logo"></div>
+            <div class="logo">Aurora</div>
+            <div class="logo">North&times;Co</div>
+            <div class="logo">Lumen</div>
+            <div class="logo">Meta/Ridge</div>
+            <div class="logo">Vestra</div>
+            <div class="logo">Quartz</div>
           </div>
           <div
             id="testimonial-cards-wrapper"
             class="flex justify-between gap-8 mt-(--space-md)"
           >
-            <div class="testimonial-card"></div>
-            <div class="testimonial-card"></div>
-            <div class="testimonial-card"></div>
-            <div class="testimonial-card"></div>
+            <div class="testimonial-card">
+              <div class="testimonial-card-content flow">
+                <span class="testimonial-card-name">Yomi Denzel</span>
+                <span class="testimonial-card-role">E-commerce CEO</span>
+              </div>
+            </div>
+            <div class="testimonial-card testimonial-card--flipped">
+              <div class="testimonial-card-content flow">
+                <span class="testimonial-card-name">Timothée Moiroux</span>
+                <span class="testimonial-card-role">Investment Banker</span>
+                <p>
+                  "It went well in high school, but as a student, Timothée
+                  understood that fake freedom offered by studies and the
+                  full-time professional career in his ten medical studies. He
+                  made his first real estate and financial investments and
+                  created his first company."
+                </p>
+              </div>
+            </div>
+            <div class="testimonial-card">
+              <div class="testimonial-card-content flow">
+                <span class="testimonial-card-name">David Sequeira</span>
+                <span class="testimonial-card-role">Founder, Lumen</span>
+              </div>
+            </div>
+            <div class="testimonial-card">
+              <div class="testimonial-card-content flow">
+                <span class="testimonial-card-name">Manuel Ravier</span>
+                <span class="testimonial-card-role">Investment Advisor</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
       <section id="portfolio">
         <div class="container py-(--space-container)">
           <div id="portfolio-copy" class="flow text-center text-measure">
-            <h2>Setiap proyek adalah cerita. Lihat hasil kerja kami.</h2>
+            <h2>
+              Setiap proyek adalah cerita.<br /><em>Lihat hasil kerja kami.</em>
+            </h2>
             <p>
               Kami tidak mengejar volume atau eksposur—setiap website kami
               rancang sebagai studi kasus tersendiri, dengan detail yang
@@ -187,28 +216,91 @@
             id="portfolio-cards-wrapper"
             class="flex justify-between gap-8 mt-(--space-md)"
           >
-            <div class="portfolio-card"></div>
-            <div class="portfolio-card"></div>
-            <div class="portfolio-card"></div>
-            <div class="portfolio-card"></div>
-            <div class="portfolio-card"></div>
+            <div class="portfolio-card">
+              <div class="portfolio-card-content flow">
+                <span class="portfolio-card-title">Aurora Studio</span>
+                <span class="portfolio-card-tag">Brand &middot; 2025</span>
+              </div>
+            </div>
+            <div class="portfolio-card">
+              <div class="portfolio-card-content flow">
+                <span class="portfolio-card-title">North&times;Co</span>
+                <span class="portfolio-card-tag">E-commerce &middot; 2025</span>
+              </div>
+            </div>
+            <div class="portfolio-card">
+              <div class="portfolio-card-content flow">
+                <span class="portfolio-card-title">Lumen Editorial</span>
+                <span class="portfolio-card-tag">Publishing &middot; 2026</span>
+              </div>
+            </div>
+            <div class="portfolio-card">
+              <div class="portfolio-card-content flow">
+                <span class="portfolio-card-title">Vestra Resort</span>
+                <span class="portfolio-card-tag"
+                  >Hospitality &middot; 2025</span
+                >
+              </div>
+            </div>
+            <div class="portfolio-card">
+              <div class="portfolio-card-content flow">
+                <span class="portfolio-card-title">Quartz Finance</span>
+                <span class="portfolio-card-tag">Fintech &middot; 2026</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
-      <section id="our-values">
+      <section id="our-values" class="">
         <div class="container py-(--space-container)">
           <div id="our-values-copy" class="flow text-center text-measure">
-            <h2>Apa yang membuat kami berbeda.</h2>
+            <h2>Apa yang membuat kami <em>berbeda.</em></h2>
             <p>
               Empat hal yang menjadi pegangan setiap kali kami merancang dan
               merawat website klien — bukan janji, tapi cara kerja.
             </p>
           </div>
           <div id="our-values-grids" class="grid">
-            <div class="our-value-grid-1"></div>
-            <div class="our-value-grid-2"></div>
-            <div class="our-value-grid-3"></div>
-            <div class="our-value-grid-4"></div>
+            <div class="our-value-grid-1">
+              <div class="our-value-content flow">
+                <span class="our-value-index">01 &middot; Identitas</span>
+                <h3>Bisnis Anda <em>unik.</em></h3>
+                <p>
+                  Pastikan dibuat custom agar karakternya dapat tersampaikan
+                  dengan baik kepada audiens Anda.
+                </p>
+              </div>
+            </div>
+            <div class="our-value-grid-2">
+              <div class="our-value-content flow">
+                <span class="our-value-index">02 &middot; Audiens</span>
+                <h3>Audiens Anda berharga.</h3>
+                <p>
+                  Berikan mereka pengalaman yang nyaman saat memasuki website
+                  Anda.
+                </p>
+              </div>
+            </div>
+            <div class="our-value-grid-3">
+              <div class="our-value-content flow">
+                <span class="our-value-index">03 &middot; Waktu</span>
+                <h3>Waktu Anda mahal.</h3>
+                <p>
+                  Kami berikan support agar Anda fokus penuh ke pekerjaan dan
+                  kehidupan, tidak menyita waktu dan perhatian.
+                </p>
+              </div>
+            </div>
+            <div class="our-value-grid-4">
+              <div class="our-value-content flow">
+                <span class="our-value-index">04 &middot; Peace of Mind</span>
+                <h3>Peace of mind Anda <em>penting.</em></h3>
+                <p>
+                  Website yang aman, terawat, dan selalu online. Tidur tenang
+                  tanpa khawatir masalah teknis yang mengganggu.
+                </p>
+              </div>
+            </div>
             <div class="our-value-grid-5"></div>
           </div>
         </div>
@@ -216,23 +308,30 @@
       <section id="home-cta">
         <div class="container py-(--space-container)">
           <div id="wow-factor-wrapper" class="flow text-center text-measure">
-            <div id="wow-factor"></div>
-            <div id="wow-factor-copy">
-              <h2>
+            <div id="wow-factor" aria-label="Hitungan mundur tiga detik">
+              <span class="countdown countdown--3">3</span>
+              <span class="countdown countdown--2">2</span>
+              <span class="countdown countdown--1">1</span>
+            </div>
+            <div id="wow-factor-copy" class="flow">
+              <p>
                 Rata-rata pengunjung akan meninggalkan website Anda dalam
-                <span class="highlight">3 detik</span>
+                <span class="highlight">3 detik.</span>
+              </p>
+              <h2>
+                Kecuali website Anda <span class="highlight">menarik.</span>
               </h2>
-              <p>Kecuali website Anda <span class="highlight">menarik</span></p>
             </div>
           </div>
           <div id="cta" class="flow text-center text-measure pt-(--space-md)">
             <p>
               Anda masih di sini?
-              <span class="highlight">Hatur nuhun.</span>Sepertinya Anda
+              <span class="highlight">Hatur nuhun.</span> Sepertinya Anda
               tertarik untuk berbicara lebih lanjut. Obrolan santai, sekedar
               diskusi awal—siapa tahu cocok dan bisa bekerja sama.
             </p>
             <a href="#" class="btn">Mulai Obrolan</a>
+            <p class="cta-note">Respons rata-rata dalam 24 jam</p>
           </div>
         </div>
       </section>
@@ -241,6 +340,7 @@
     <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
     <script src="./resources/js/animation.js"></script>
+    <script src="./resources/js/animation-pt2.js"></script>
     <script src="./resources/js/debug.js"></script>
   </body>
 </html>
